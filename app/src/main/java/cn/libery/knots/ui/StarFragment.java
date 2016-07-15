@@ -1,4 +1,4 @@
-package cn.libery.knots;
+package cn.libery.knots.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +18,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.libery.knots.Constants;
+import cn.libery.knots.R;
 
 /**
  * Created by Libery on 2016/7/14.
@@ -102,5 +104,5 @@ public class StarFragment extends Fragment {
             return mFragmentTitles.get(position);
         }
     }
-    
+
 }
