@@ -2,11 +2,13 @@ package cn.libery.knots;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +16,24 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Libery on 2016/7/14.
  * Email:libery.szq@qq.com
  */
 public class StarFragment extends Fragment {
 
+
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.tabs)
+    TabLayout mTabs;
+    @BindView(R.id.appbar)
+    AppBarLayout mAppbar;
+    @BindView(R.id.viewpager)
+    ViewPager mViewpager;
 
     public static StarFragment newInstance() {
         return new StarFragment();
@@ -35,13 +49,10 @@ public class StarFragment extends Fragment {
     public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final
     Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_star, container, false);
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        if (viewPager != null) {
-            setupViewPager(viewPager);
-        }
+        ButterKnife.bind(this, view);
 
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
+        setupViewPager(mViewpager);
+        mTabs.setupWithViewPager(mViewpager);
         return view;
     }
 
@@ -91,4 +102,5 @@ public class StarFragment extends Fragment {
             return mFragmentTitles.get(position);
         }
     }
+    
 }
