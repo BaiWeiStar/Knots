@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import cn.libery.knots.Constants;
+import cn.libery.knots.R;
 
 /**
  * Created by Libery on 2016/7/14.
@@ -35,7 +36,8 @@ public class StarTypeFragment extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final
     Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_star_type, container, false);
+        return view;
     }
 
 }

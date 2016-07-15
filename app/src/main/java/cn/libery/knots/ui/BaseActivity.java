@@ -1,5 +1,7 @@
 package cn.libery.knots.ui;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,7 +17,18 @@ import cn.libery.knots.R;
  * Created by Libery on 2016/7/15.
  * Email:libery.szq@qq.com
  */
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(getContentView());
+
+        obtainParam(getIntent());
+        initView();
+        initData();
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -25,6 +38,14 @@ public class BaseActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
     }
+
+    protected abstract int getContentView();
+
+    protected abstract void obtainParam(Intent intent);
+
+    protected abstract void initView();
+
+    protected abstract void initData();
 
     public void initToolbar(int titleRes) {
         String title = getString(titleRes);
@@ -52,7 +73,8 @@ public class BaseActivity extends AppCompatActivity {
         initToolbar(title, 0, rightMenu, listener);
     }
 
-    public void initToolbar(String title, int backIconRes, String rightMenu, final OnToolbarMenuClickListener listener) {
+    public void initToolbar(String title, int backIconRes, String rightMenu, final OnToolbarMenuClickListener
+            listener) {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         TextView titleText = (TextView) toolbar.findViewById(R.id.title);
         titleText.setText(title);

@@ -1,11 +1,7 @@
 package cn.libery.knots.ui;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import cn.libery.knots.R;
 
@@ -13,7 +9,9 @@ import cn.libery.knots.R;
  * Created by Libery on 2016/7/15.
  * Email:libery.szq@qq.com
  */
-public class MyFragment extends Fragment {
+public class MyFragment extends BaseLazyFragment {
+
+    private boolean isPrepared;
 
     public static MyFragment newInstance() {
         Bundle args = new Bundle();
@@ -23,15 +21,25 @@ public class MyFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(@Nullable final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void lazyLoad() {
+        if (isPrepared && mIsVisibleToUser) {
+            isPrepared = false;
+
+        }
     }
 
-    @Nullable
     @Override
-    public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final
-    Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_my, container, false);
-        return view;
+    protected int getContentView() {
+        return R.layout.fragment_my;
+    }
+
+    @Override
+    protected void initView(final View view) {
+        isPrepared = true;
+    }
+
+    @Override
+    protected void initData() {
+
     }
 }

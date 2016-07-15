@@ -1,11 +1,10 @@
 package cn.libery.knots.ui;
 
-import android.os.Bundle;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
@@ -17,7 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.libery.knots.R;
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationBar.OnTabSelectedListener {
+public class MainActivity extends BaseActivity implements BottomNavigationBar.OnTabSelectedListener {
 
     @BindView(R.id.viewpager)
     ViewPager mViewpager;
@@ -25,9 +24,17 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
     BottomNavigationBar mBottomNavigationBar;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    protected int getContentView() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected void obtainParam(final Intent intent) {
+
+    }
+
+    @Override
+    protected void initView() {
         ButterKnife.bind(this);
         mBottomNavigationBar
                 .addItem(new BottomNavigationItem(R.mipmap.ic_launcher, "Stars").setActiveColorResource(R.color
@@ -59,6 +66,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
 
             }
         });
+    }
+
+    @Override
+    protected void initData() {
+
     }
 
     @Override
