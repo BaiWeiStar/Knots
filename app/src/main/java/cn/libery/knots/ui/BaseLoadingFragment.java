@@ -15,7 +15,7 @@ import cn.libery.knots.R;
  * Created by Libery on 2016/7/15.
  * Email:libery.szq@qq.com
  */
-public abstract class BaseLoadingFragment extends BaseFragment {
+public abstract class BaseLoadingFragment extends BaseLazyFragment {
 
     private ViewGroup mContentView;
     private View mProgressBar;
@@ -42,6 +42,7 @@ public abstract class BaseLoadingFragment extends BaseFragment {
                 loadData();
             }
         });
+        initView(v);
         return v;
     }
 
@@ -112,5 +113,7 @@ public abstract class BaseLoadingFragment extends BaseFragment {
     public LayoutInflater getInflater() {
         return mInflater;
     }
+
+    protected abstract void initView(View view);
 
 }

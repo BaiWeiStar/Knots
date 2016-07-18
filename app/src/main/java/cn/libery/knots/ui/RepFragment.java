@@ -9,7 +9,7 @@ import cn.libery.knots.R;
  * Created by Libery on 2016/7/15.
  * Email:libery.szq@qq.com
  */
-public class RepFragment extends BaseLazyFragment {
+public class RepFragment extends BaseLoadingFragment {
 
     private boolean isPrepared;
 
@@ -29,8 +29,13 @@ public class RepFragment extends BaseLazyFragment {
     }
 
     @Override
-    protected int getContentView() {
+    protected int getContentLayout() {
         return R.layout.fragment_rep;
+    }
+
+    @Override
+    protected void loadData() {
+
     }
 
     @Override
