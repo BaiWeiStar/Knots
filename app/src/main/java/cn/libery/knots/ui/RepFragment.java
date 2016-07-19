@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import cn.libery.knots.R;
+import cn.libery.knots.utils.Logger;
 
 /**
  * Created by Libery on 2016/7/15.
@@ -24,7 +25,9 @@ public class RepFragment extends BaseLoadingFragment {
     protected void lazyLoad() {
         if (isPrepared && mIsVisibleToUser) {
             isPrepared = false;
-
+            Logger.e("lazyLoad");
+            //showLoadingView();
+            // showContentView();
         }
     }
 
@@ -35,17 +38,18 @@ public class RepFragment extends BaseLoadingFragment {
 
     @Override
     protected void loadData() {
-
+        Logger.e("loadData");
     }
 
     @Override
     protected void initView(final View view) {
         isPrepared = true;
+        Logger.e("%s111%s11", "s", "3");
     }
 
     @Override
     protected void initData() {
-
+        Logger.e("initData", "xxx");
     }
 
 }

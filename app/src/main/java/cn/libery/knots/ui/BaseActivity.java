@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import cn.libery.knots.R;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by Libery on 2016/7/15.
@@ -19,10 +20,16 @@ import cn.libery.knots.R;
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
+    public CompositeSubscription mSubscription;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getContentView());
+
+        if (mSubscription == null) {
+            mSubscription = new CompositeSubscription();
+        }
 
         obtainParam(getIntent());
         initView();
@@ -37,6 +44,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        if (mSubscription != null) {
+            mSubscription.clear();
+        }
     }
 
     protected abstract int getContentView();
