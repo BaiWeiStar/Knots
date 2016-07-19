@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.Toolbar
+    android:id="@+id/toolbar"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
     android:background="?attr/colorPrimary"
-    android:elevation="2dp"
+    app:elevation="5dp"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
     <TextView
@@ -16,7 +17,7 @@
         android:layout_gravity="left|center_vertical"
         android:textColor="@color/main_black"
         android:textSize="14sp"
-        tools:text="一月" />
+        tools:text="一月"/>
 
     <LinearLayout
         android:id="@+id/toolbar_main_title_root"
@@ -32,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:maxEms="8"
-            tools:text="AAAAAAAAWWWWWWWWWWWWWWWWWWWWWWWWW" />
+            tools:text="AAAAAAAAWWWWWWWWWWWWWWWWWWWWWWWWW"/>
 
         <ImageView
             android:id="@+id/toolbar_main_expand"
@@ -40,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="4dp"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/ic_launcher"/>
     </LinearLayout>
 
 </android.support.v7.widget.Toolbar>

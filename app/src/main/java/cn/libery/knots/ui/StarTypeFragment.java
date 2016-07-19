@@ -2,10 +2,7 @@ package cn.libery.knots.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import cn.libery.knots.Constants;
 import cn.libery.knots.R;
@@ -14,7 +11,7 @@ import cn.libery.knots.R;
  * Created by Libery on 2016/7/14.
  * Email:libery.szq@qq.com
  */
-public class StarTypeFragment extends Fragment {
+public class StarTypeFragment extends BaseLoadingFragment {
 
     private String mType;
 
@@ -32,12 +29,28 @@ public class StarTypeFragment extends Fragment {
         mType = getArguments().getString(Constants.FRAGMENT_TYPE);
     }
 
-    @Nullable
     @Override
-    public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final
-    Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_star_type, container, false);
-        return view;
+    protected int getContentLayout() {
+        return R.layout.fragment_star_type;
     }
 
+    @Override
+    protected void loadData() {
+
+    }
+
+    @Override
+    protected void initView(final View view) {
+
+    }
+
+    @Override
+    protected void lazyLoad() {
+
+    }
+
+    @Override
+    protected void initData() {
+
+    }
 }
