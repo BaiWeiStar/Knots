@@ -31,7 +31,10 @@ public abstract class BaseActivity extends AppCompatActivity {
             mSubscription = new CompositeSubscription();
         }
 
-        obtainParam(getIntent());
+        if (getIntent() != null) {
+            obtainParam(getIntent());
+        }
+
         initView();
         initData();
     }
