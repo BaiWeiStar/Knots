@@ -1,4 +1,4 @@
-package cn.libery.knots.ui;
+package cn.libery.knots.ui.star;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

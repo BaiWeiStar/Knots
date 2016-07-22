@@ -1,6 +1,5 @@
 package cn.libery.knots.api;
 
-
 import android.text.TextUtils;
 
 import java.io.IOException;
@@ -15,7 +14,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import cn.libery.knots.model.Result;
-import cn.libery.knots.model.Token;
+import cn.libery.knots.model.User;
 import okhttp3.Headers;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -31,19 +30,18 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by Libery on 2016/3/28.
+ * Created by Libery on 2016/7/22.
  * Email:libery.szq@qq.com
  */
-public class Api {
-
-    public static final String BASE_DAILY_URL = "https://github.com/";
+public class Api2 {
+    public static final String BASE_DAILY_URL = "https://api.github.com/";
 
     private static final int DEFAULT_TIMEOUT = 15;
 
     private UserApiService apiService;
 
     //构造方法私有
-    private Api() {
+    private Api2() {
         final OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
         builder.readTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
@@ -123,11 +121,11 @@ public class Api {
 
     //在访问Api时创建单例
     private static class SingleApi {
-        private static final Api INSTANCE = new Api();
+        private static final Api2 INSTANCE = new Api2();
     }
 
     //获取单例
-    public static Api getInstance() {
+    public static Api2 getInstance() {
         return SingleApi.INSTANCE;
     }
 
@@ -172,11 +170,10 @@ public class Api {
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    public void postObtainToken(Subscriber<Token> subscriber, String client_id, String client_secret, String code,
-                                String redirect_uri) {
-        Observable<Token> observable = apiService.postObtainToken(client_id, client_secret, code, redirect_uri).map
-                (new HttpResultFunc<Token>());
+
+    public void authUserClient(Subscriber<User> subscriber, String access_token) {
+        Observable<User> observable = apiService.authUserClient(access_token).map
+                (new HttpResultFunc<User>());
         toSubscribe(observable, subscriber);
     }
-
 }

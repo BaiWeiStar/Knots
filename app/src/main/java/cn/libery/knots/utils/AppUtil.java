@@ -13,11 +13,11 @@ public class AppUtil {
 
     public static void universalException(final Throwable e) {
         if (e instanceof SocketTimeoutException) {
-            // ToastUtil.showAtUI("网络连接超时，请检查网络或稍后再试");
+            ToastUtil.showAtUI("网络连接超时，请检查网络或稍后再试");
         } else if (e instanceof ConnectException) {
-            //  ToastUtil.showAtUI("网络错误，请检查网络或稍后再试");
+            ToastUtil.showAtUI("网络错误，请检查网络或稍后再试");
         } else {
-            //      ToastUtil.showAtUI(e.getMessage());
+            ToastUtil.showAtUI(e.getMessage());
         }
     }
 
