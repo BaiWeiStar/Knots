@@ -20,7 +20,6 @@ public class MyFragment extends BaseLoadingFragment {
     @BindView(R.id.my_avatar)
     SmartImageView mMyAvatar;
     private boolean isPrepared;
-    private UserRecord mRecord;
 
     public static MyFragment newInstance() {
         Bundle args = new Bundle();
@@ -33,10 +32,10 @@ public class MyFragment extends BaseLoadingFragment {
     protected void lazyLoad() {
         if (isPrepared && mIsVisibleToUser) {
             isPrepared = false;
-            mRecord = UserRecord.getUserRecord(getActivity());
-            Logger.e("id = %s", mRecord.id);
+            final UserRecord record = UserRecord.getUserRecord(getActivity());
+            Logger.e("id = %s", record.id);
             showContentView();
-            mMyAvatar.setImageUrl(mRecord.avatar_url);
+            mMyAvatar.setImageUrl(record.avatar_url);
         }
     }
 
