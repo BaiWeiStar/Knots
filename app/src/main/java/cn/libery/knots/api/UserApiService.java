@@ -6,6 +6,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
 
@@ -26,4 +27,6 @@ public interface UserApiService {
     @GET("user")
     Observable<User> authUserClient(@Query("access_token") String access_token);
 
+    @GET("users/{name}")
+    Observable<User> userProfile(@Path("name") String userName);
 }

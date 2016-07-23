@@ -7,7 +7,11 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.libery.knots.R;
+import cn.libery.knots.api.Api2;
+import cn.libery.knots.api.subscribers.MySubscriber;
+import cn.libery.knots.api.subscribers.SubscriberListener;
 import cn.libery.knots.db.UserRecord;
+import cn.libery.knots.model.User;
 import cn.libery.knots.ui.BaseLoadingFragment;
 import cn.libery.knots.utils.Logger;
 import cn.libery.knots.widget.SmartImageView;
@@ -43,19 +47,26 @@ public class MyFragment extends BaseLoadingFragment {
     protected void lazyLoad() {
         if (isPrepared && mIsVisibleToUser) {
             isPrepared = false;
-            final UserRecord record = UserRecord.getUserRecord(getActivity());
-            showContentView();
+            UserRecord record = UserRecord.getUserRecord(getActivity());
             if (record != null) {
-                Logger.e("id = %s", record.id);
-                mMyAvatar.setImageUrl(record.avatar_url);
-                mMyLogin.setText(record.login);
-                mMyName.setText(record.name);
-                mMyLocation.setText(record.location);
-                mMyEmail.setText(record.email);
-                mMyBlog.setText(record.blog);
+                refreshUserProfile(record.login);
+                showContentView();
+                refreshUI(record);
+            } else {
+                showErrorView();
             }
 
         }
+    }
+
+    private void refreshUI(UserRecord record) {
+        Logger.e("id = %s", record.id);
+        mMyAvatar.setImageUrl(record.avatar_url);
+        mMyLogin.setText(record.login);
+        mMyName.setText(record.name);
+        mMyLocation.setText(record.location);
+        mMyEmail.setText(record.email);
+        mMyBlog.setText(record.blog);
     }
 
     @Override
@@ -77,6 +88,25 @@ public class MyFragment extends BaseLoadingFragment {
     @Override
     protected void loadData() {
 
+    }
+
+    private void refreshUserProfile(String name) {
+        SubscriberListener<User> listener = new SubscriberListener<User>() {
+            @Override
+            public void onNext(final User user) {
+                UserRecord.saveUser(getActivity(), user);
+                UserRecord record = UserRecord.getUserRecord(getActivity());
+                refreshUI(record);
+            }
+
+            @Override
+            public void onError(final Throwable e) {
+
+            }
+        };
+        MySubscriber<User> subscriber = new MySubscriber<>(listener);
+        Api2.getInstance().userProfile(subscriber, name);
+        mSubscription.add(subscriber);
     }
 
 }

@@ -176,4 +176,10 @@ public class Api2 {
                 (new HttpResultFunc<User>());
         toSubscribe(observable, subscriber);
     }
+
+    public void userProfile(Subscriber<User> subscriber, String userName) {
+        Observable<User> observable = apiService.userProfile(userName).map
+                (new HttpResultFunc<User>());
+        toSubscribe(observable, subscriber);
+    }
 }
