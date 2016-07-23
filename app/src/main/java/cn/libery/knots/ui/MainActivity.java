@@ -15,6 +15,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.libery.knots.R;
+import cn.libery.knots.ui.my.MyFragment;
+import cn.libery.knots.ui.repository.RepFragment;
+import cn.libery.knots.ui.star.StarFragment;
 
 public class MainActivity extends BaseActivity implements BottomNavigationBar.OnTabSelectedListener {
 

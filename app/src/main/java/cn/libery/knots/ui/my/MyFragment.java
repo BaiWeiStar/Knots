@@ -1,9 +1,10 @@
-package cn.libery.knots.ui;
+package cn.libery.knots.ui.my;
 
 import android.os.Bundle;
 import android.view.View;
 
 import cn.libery.knots.R;
+import cn.libery.knots.ui.BaseLoadingFragment;
 
 /**
  * Created by Libery on 2016/7/15.
