@@ -13,6 +13,7 @@ import cn.libery.knots.api.Api;
 import cn.libery.knots.api.Api2;
 import cn.libery.knots.api.subscribers.ProgressSubscriber;
 import cn.libery.knots.api.subscribers.SubscriberListener;
+import cn.libery.knots.db.UserRecord;
 import cn.libery.knots.model.Token;
 import cn.libery.knots.model.User;
 import cn.libery.knots.utils.Logger;
@@ -104,6 +105,7 @@ public class GuideActivity extends BaseActivity {
             @Override
             public void onNext(final User user) {
                 if (user != null) {
+                    UserRecord.saveUser(getApplicationContext(), user);
                     SharedPreferUtil.put(Constants.SHARE_FIRST_START, true);
                     startMainActivity();
                 }

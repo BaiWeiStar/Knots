@@ -18,6 +18,7 @@ import cn.libery.knots.R;
 import cn.libery.knots.ui.my.MyFragment;
 import cn.libery.knots.ui.repository.RepFragment;
 import cn.libery.knots.ui.star.StarFragment;
+import cn.libery.knots.utils.Logger;
 
 public class MainActivity extends BaseActivity implements BottomNavigationBar.OnTabSelectedListener {
 
@@ -69,11 +70,12 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
 
             }
         });
+
     }
 
     @Override
     protected void initData() {
-
+        Logger.e("initData");
     }
 
     @Override

@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.view.View;
 
 import cn.libery.knots.R;
+import cn.libery.knots.db.UserRecord;
 import cn.libery.knots.ui.BaseLoadingFragment;
+import cn.libery.knots.utils.Logger;
 
 /**
  * Created by Libery on 2016/7/15.
@@ -13,6 +15,7 @@ import cn.libery.knots.ui.BaseLoadingFragment;
 public class MyFragment extends BaseLoadingFragment {
 
     private boolean isPrepared;
+    private UserRecord mRecord;
 
     public static MyFragment newInstance() {
         Bundle args = new Bundle();
@@ -25,7 +28,9 @@ public class MyFragment extends BaseLoadingFragment {
     protected void lazyLoad() {
         if (isPrepared && mIsVisibleToUser) {
             isPrepared = false;
-
+            mRecord = UserRecord.getUserRecord(getActivity());
+            Logger.e("id = %s", mRecord.id);
+            showContentView();
         }
     }
 
