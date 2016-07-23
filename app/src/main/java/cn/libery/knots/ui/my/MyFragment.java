@@ -3,10 +3,13 @@ package cn.libery.knots.ui.my;
 import android.os.Bundle;
 import android.view.View;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cn.libery.knots.R;
 import cn.libery.knots.db.UserRecord;
 import cn.libery.knots.ui.BaseLoadingFragment;
 import cn.libery.knots.utils.Logger;
+import cn.libery.knots.widget.SmartImageView;
 
 /**
  * Created by Libery on 2016/7/15.
@@ -14,6 +17,8 @@ import cn.libery.knots.utils.Logger;
  */
 public class MyFragment extends BaseLoadingFragment {
 
+    @BindView(R.id.my_avatar)
+    SmartImageView mMyAvatar;
     private boolean isPrepared;
     private UserRecord mRecord;
 
@@ -31,12 +36,14 @@ public class MyFragment extends BaseLoadingFragment {
             mRecord = UserRecord.getUserRecord(getActivity());
             Logger.e("id = %s", mRecord.id);
             showContentView();
+            mMyAvatar.setImageUrl(mRecord.avatar_url);
         }
     }
 
     @Override
     protected void initView(final View view) {
         isPrepared = true;
+        ButterKnife.bind(this, view);
     }
 
     @Override
@@ -53,4 +60,5 @@ public class MyFragment extends BaseLoadingFragment {
     protected void loadData() {
 
     }
+
 }

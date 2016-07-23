@@ -1,8 +1,13 @@
 package cn.libery.knots.widget;
 
 import android.content.Context;
+import android.support.annotation.DrawableRes;
 import android.util.AttributeSet;
 import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+
+import cn.libery.knots.R;
 
 /**
  * Created by Libery on 2016/7/23.
@@ -16,6 +21,27 @@ public class SmartImageView extends ImageView {
 
     public SmartImageView(final Context context, final AttributeSet attrs) {
         super(context, attrs);
+    }
+
+    public void setImageUrl(String url) {
+        setImageUrl(url, 0, 0);
+    }
+
+    public void setImageUrl(String url, @DrawableRes int loadingDrawable, @DrawableRes int failDrawable) {
+        if (loadingDrawable == 0) {
+            loadingDrawable = R.mipmap.ic_launcher;
+        }
+
+        if (failDrawable == 0) {
+            failDrawable = R.mipmap.ic_launcher;
+        }
+        Glide.with(getContext().getApplicationContext())
+                .load(url)
+                .placeholder(loadingDrawable)
+                .error(failDrawable)
+                .fitCenter()
+                .crossFade()
+                .into(this);
     }
 
 }
