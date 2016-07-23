@@ -13,6 +13,7 @@ import io.realm.RealmObject;
 public class UserRecord extends RealmObject {
 
     public int id;
+    public String login;
     public String avatar_url;
     public String gravatar_id;
     public String url;
@@ -49,6 +50,7 @@ public class UserRecord extends RealmObject {
 
     private static void setUser(UserRecord record, User user) {
         record.id = user.getId();
+        record.login = user.getLogin();
         record.avatar_url = user.getAvatar_url();
         record.gravatar_id = user.getGravatar_id();
         record.url = user.getUrl();
