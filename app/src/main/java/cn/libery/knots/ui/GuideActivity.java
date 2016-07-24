@@ -105,7 +105,8 @@ public class GuideActivity extends BaseActivity {
             @Override
             public void onNext(final User user) {
                 if (user != null) {
-                    UserRecord.saveUser(getApplicationContext(), user);
+                    user.setAccessToken(access_token);
+                    UserRecord.saveUser(user, true);
                     SharedPreferUtil.put(Constants.SHARE_FIRST_START, true);
                     startMainActivity();
                 }

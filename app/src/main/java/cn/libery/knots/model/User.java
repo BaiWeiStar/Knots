@@ -81,7 +81,16 @@ public class User extends Result {
     private int disk_usage;
     private int collaborators;
 
-    public int starred;
+    private int starred;
+    private String accessToken;
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(final String accessToken) {
+        this.accessToken = accessToken;
+    }
 
     public int getStarred() {
         return starred;

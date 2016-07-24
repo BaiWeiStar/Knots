@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
-apply plugin: 'realm-android'
+apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion 24
@@ -39,6 +39,11 @@ dependencies {
     compile "com.squareup.retrofit2:retrofit:${retrofit_version}"
     compile "com.squareup.retrofit2:adapter-rxjava:${retrofit_version}"
     compile "com.squareup.retrofit2:converter-gson:${retrofit_version}"
+
+    apt "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
+    // use kapt for kotlin apt
+    compile "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
+    compile "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
 
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'com.ashokvarma.android:bottom-navigation-bar:1.3.0'

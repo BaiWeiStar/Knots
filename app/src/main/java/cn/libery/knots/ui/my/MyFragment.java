@@ -53,7 +53,7 @@ public class MyFragment extends BaseLoadingFragment {
     protected void lazyLoad() {
         if (isPrepared && mIsVisibleToUser) {
             isPrepared = false;
-            UserRecord record = UserRecord.getUserRecord(getActivity());
+            UserRecord record = UserRecord.getUserRecord();
             if (record != null) {
                 refreshUserProfile(record.login);
                 showContentView();
@@ -103,8 +103,7 @@ public class MyFragment extends BaseLoadingFragment {
         SubscriberListener<User> listener = new SubscriberListener<User>() {
             @Override
             public void onNext(final User user) {
-                UserRecord.saveUser(getActivity(), user);
-                UserRecord record = UserRecord.getUserRecord(getActivity());
+                UserRecord record = UserRecord.saveUser(user, false);
                 refreshUI(record);
             }
 

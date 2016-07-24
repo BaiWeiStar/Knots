@@ -13,6 +13,7 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import cn.libery.knots.db.UserRecord;
 import cn.libery.knots.model.Result;
 import cn.libery.knots.model.User;
 import okhttp3.Headers;
@@ -47,15 +48,26 @@ public class Api2 {
         builder.readTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
         builder.retryOnConnectionFailure(true);
 
+        UserRecord record = UserRecord.getUserRecord();
+        final String token;
+        if (record != null) {
+            token = "Authorization: token " + record.accessToken;
+        } else {
+            token = "";
+        }
+
         Interceptor interceptor = new Interceptor() {
 
             @Override
             public Response intercept(Chain chain) throws IOException {
-                Headers headers = new Headers.Builder()
+                Headers.Builder builder = new Headers.Builder()
                         .add("Accept", "application/json")
                         .add("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
-                        .add("User-Agent", "Knots")
-                        .build();
+                        .add("User-Agent", "Knots");
+                if (!TextUtils.isEmpty(token)) {
+                    builder.add(token);
+                }
+                Headers headers = builder.build();
                 Request request = chain.request()
                         .newBuilder()
                         .headers(headers)
