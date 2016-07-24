@@ -80,6 +80,16 @@ public class User extends Result {
     private int owned_private_repos;
     private int disk_usage;
     private int collaborators;
+
+    public int starred;
+
+    public int getStarred() {
+        return starred;
+    }
+
+    public void setStarred(final int starred) {
+        this.starred = starred;
+    }
     /**
      * name : free
      * space : 976562499

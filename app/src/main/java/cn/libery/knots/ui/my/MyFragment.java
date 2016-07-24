@@ -34,6 +34,12 @@ public class MyFragment extends BaseLoadingFragment {
     TextView mMyEmail;
     @BindView(R.id.my_blog)
     TextView mMyBlog;
+    @BindView(R.id.my_follows)
+    TextView mMyFollows;
+    @BindView(R.id.my_starred)
+    TextView mMyStarred;
+    @BindView(R.id.my_following)
+    TextView mMyFollowing;
     private boolean isPrepared;
 
     public static MyFragment newInstance() {
@@ -67,6 +73,9 @@ public class MyFragment extends BaseLoadingFragment {
         mMyLocation.setText(record.location);
         mMyEmail.setText(record.email);
         mMyBlog.setText(record.blog);
+        mMyFollows.setText(String.valueOf(record.followers));
+        mMyStarred.setText(String.valueOf(record.starred));
+        mMyFollowing.setText(String.valueOf(record.following));
     }
 
     @Override

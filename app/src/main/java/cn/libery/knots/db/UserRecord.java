@@ -47,6 +47,7 @@ public class UserRecord extends RealmObject {
     public int owned_private_repos;
     public int disk_usage;
     public int collaborators;
+    public int starred;
 
     private static void setUser(UserRecord record, User user) {
         record.id = user.getId();
@@ -84,6 +85,7 @@ public class UserRecord extends RealmObject {
         record.owned_private_repos = user.getOwned_private_repos();
         record.disk_usage = user.getDisk_usage();
         record.collaborators = user.getCollaborators();
+        record.starred = user.getStarred();
     }
 
     public static void saveUser(Context context, User user) {
