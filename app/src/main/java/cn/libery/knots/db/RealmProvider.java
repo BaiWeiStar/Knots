@@ -15,10 +15,11 @@ public class RealmProvider {
     private static RealmProvider mInstance;
 
     public RealmProvider(final Context context) {
-        mContext = context;
+        mContext = context.getApplicationContext();
     }
 
     public static RealmProvider getInstance(Context context) {
+        context = context.getApplicationContext();
         if (mInstance == null) {
             synchronized (RealmProvider.class) {
                 if (mInstance == null) {

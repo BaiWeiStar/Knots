@@ -61,14 +61,7 @@ public class Api2 {
                         .headers(headers)
                         .build();
 
-                Response response = chain.proceed(request);
-               /* int tryCount = 0;
-                while (!response.isSuccessful() && tryCount < 3) {
-                    response = chain.proceed(request);
-                    tryCount++;
-                    LogUtil.e("tryCount", tryCount + "");
-                }*/
-                return response;
+                return chain.proceed(request);
             }
         };
 
