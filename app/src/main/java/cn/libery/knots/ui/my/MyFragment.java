@@ -1,15 +1,21 @@
 package cn.libery.knots.ui.my;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebSettings;
 import android.widget.TextView;
+
+import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.libery.knots.R;
+import cn.libery.knots.api.Api;
 import cn.libery.knots.api.Api2;
 import cn.libery.knots.api.subscribers.MySubscriber;
 import cn.libery.knots.api.subscribers.SubscriberListener;
+import cn.libery.knots.api.websource.WebApiProvider;
 import cn.libery.knots.db.UserRecord;
 import cn.libery.knots.model.User;
 import cn.libery.knots.ui.BaseLoadingFragment;
@@ -58,11 +64,16 @@ public class MyFragment extends BaseLoadingFragment {
                 refreshUserProfile(record.login);
                 showContentView();
                 refreshUI(record);
+                refreshStarred(record);
             } else {
                 showErrorView();
             }
 
         }
+    }
+
+    private void refreshStarred(final UserRecord record) {
+        new StarredTask(this, record).execute();
     }
 
     private void refreshUI(UserRecord record) {
@@ -115,6 +126,37 @@ public class MyFragment extends BaseLoadingFragment {
         MySubscriber<User> subscriber = new MySubscriber<>(listener);
         Api2.getInstance().userProfile(subscriber, name);
         mSubscription.add(subscriber);
+    }
+
+    private static class StarredTask extends AsyncTask<Void, Void, User> {
+        private MyFragment mFragment;
+        private UserRecord mRecord;
+
+        public StarredTask(MyFragment fragment, UserRecord record) {
+            mFragment = fragment;
+            mRecord = record;
+        }
+
+        @Override
+        protected User doInBackground(final Void... params) {
+            WebApiProvider provider = new WebApiProvider(Api.BASE_DAILY_URL, WebSettings.getDefaultUserAgent(mFragment
+                    .getActivity()));
+            try {
+                return provider.getUser(mRecord.login);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(final User user) {
+            super.onPostExecute(user);
+            if (user != null) {
+                mRecord = UserRecord.updateStarred(user);
+                mFragment.mMyStarred.setText(String.valueOf(mRecord.starred));
+            }
+        }
     }
 
 }

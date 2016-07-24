@@ -168,7 +168,6 @@ public class UserRecord extends BaseModel {
         record.owned_private_repos = user.getOwned_private_repos();
         record.disk_usage = user.getDisk_usage();
         record.collaborators = user.getCollaborators();
-        record.starred = user.getStarred();
         if (saveToken) {
             record.accessToken = user.getAccessToken();
         }
@@ -189,6 +188,13 @@ public class UserRecord extends BaseModel {
 
     public static UserRecord getUserRecord() {
         return new Select().from(UserRecord.class).querySingle();
+    }
+
+    public static UserRecord updateStarred(User user) {
+        UserRecord record = getUserRecord();
+        record.starred = user.getStarred();
+        record.update();
+        return record;
     }
 
 }
