@@ -1,5 +1,8 @@
 package cn.libery.knots.api;
 
+import java.util.List;
+
+import cn.libery.knots.model.Repository;
 import cn.libery.knots.model.Token;
 import cn.libery.knots.model.User;
 import retrofit2.http.Field;
@@ -29,4 +32,9 @@ public interface UserApiService {
 
     @GET("users/{name}")
     Observable<User> userProfile(@Path("name") String userName);
+
+    @GET("users/{name}/starred")
+    Observable<List<Repository>> getUserStarred(@Path("name") String userName,
+                                                @Query("page") int page,
+                                                @Query("per_page") int per_page);
 }

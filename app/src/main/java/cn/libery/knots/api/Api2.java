@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import java.io.IOException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
@@ -14,6 +15,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import cn.libery.knots.db.UserRecord;
+import cn.libery.knots.model.Repository;
 import cn.libery.knots.model.Result;
 import cn.libery.knots.model.User;
 import okhttp3.Headers;
@@ -185,6 +187,11 @@ public class Api2 {
     public void userProfile(Subscriber<User> subscriber, String userName) {
         Observable<User> observable = apiService.userProfile(userName).map
                 (new HttpResultFunc<User>());
+        toSubscribe(observable, subscriber);
+    }
+
+    public void getUserStarred(Subscriber<List<Repository>> subscriber, String userName, int page, int per_page) {
+        Observable<List<Repository>> observable = apiService.getUserStarred(userName, page, per_page);
         toSubscribe(observable, subscriber);
     }
 }
