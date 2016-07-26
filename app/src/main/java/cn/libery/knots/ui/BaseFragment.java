@@ -17,11 +17,14 @@ public class BaseFragment extends Fragment {
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
 
+    @Override
+    public void setUserVisibleHint(final boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
         if (mSubscription == null) {
             mSubscription = new CompositeSubscription();
         }
-
     }
 
     @Override
