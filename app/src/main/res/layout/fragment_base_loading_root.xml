@@ -16,6 +16,7 @@
         android:id="@+id/base_progressbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/ListSpinner"
         android:layout_gravity="center"
         android:visibility="visible"
         tools:visibility="visible"/>
