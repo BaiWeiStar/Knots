@@ -27,7 +27,7 @@ public class ProgressDialogHandler extends Handler {
     }
 
     private void initProgressDialog() {
-        if (pd == null) {
+        if (context != null && pd == null) {
             pd = new ProgressDialog(context);
             pd.setMessage("请稍候...");
             pd.setCancelable(cancelable);

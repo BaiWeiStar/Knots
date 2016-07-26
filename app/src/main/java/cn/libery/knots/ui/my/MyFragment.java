@@ -59,16 +59,19 @@ public class MyFragment extends BaseLoadingFragment {
     protected void lazyLoad() {
         if (isPrepared && mIsVisibleToUser) {
             isPrepared = false;
-            UserRecord record = UserRecord.getUserRecord();
-            if (record != null) {
-                refreshUserProfile(record.login);
-                showContentView();
-                refreshUI(record);
-                refreshStarred(record);
-            } else {
-                showErrorView();
-            }
+            getData();
+        }
+    }
 
+    private void getData() {
+        UserRecord record = UserRecord.getUserRecord();
+        if (record != null) {
+            refreshUserProfile(record.login);
+            showContentView();
+            refreshUI(record);
+            refreshStarred(record);
+        } else {
+            showErrorView();
         }
     }
 
@@ -107,7 +110,7 @@ public class MyFragment extends BaseLoadingFragment {
 
     @Override
     protected void loadData() {
-
+        getData();
     }
 
     private void refreshUserProfile(String name) {
