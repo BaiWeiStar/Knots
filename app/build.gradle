@@ -39,6 +39,7 @@ dependencies {
     compile "com.squareup.retrofit2:retrofit:${retrofit_version}"
     compile "com.squareup.retrofit2:adapter-rxjava:${retrofit_version}"
     compile "com.squareup.retrofit2:converter-gson:${retrofit_version}"
+    compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
 
     apt "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
     compile "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
