@@ -18,11 +18,9 @@ import cn.libery.knots.model.Repository;
  */
 public class RecStarredAdapter extends SuperAdapter<Repository> {
 
-    private List<Repository> mList;
 
     public RecStarredAdapter(final List<Repository> list, int layout) {
         super(list, layout);
-        mList = list;
     }
 
     @Override

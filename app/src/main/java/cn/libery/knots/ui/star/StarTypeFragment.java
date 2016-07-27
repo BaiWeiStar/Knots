@@ -2,10 +2,12 @@ package cn.libery.knots.ui.star;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -20,18 +22,25 @@ import cn.libery.knots.db.UserRecord;
 import cn.libery.knots.model.Repository;
 import cn.libery.knots.ui.BaseLoadingFragment;
 import cn.libery.knots.utils.Logger;
+import cn.libery.knots.widget.SwipeRecyclerView;
 
 /**
  * Created by Libery on 2016/7/14.
  * Email:libery.szq@qq.com
  */
-public class StarTypeFragment extends BaseLoadingFragment {
+public class StarTypeFragment extends BaseLoadingFragment implements SwipeRefreshLayout.OnRefreshListener,
+        SwipeRecyclerView.OnLoadMoreListener {
 
     private boolean isPrepared;
 
     @BindView(R.id.starred_recycle)
-    RecyclerView mStarredRecycle;
+    SwipeRecyclerView mStarredRecycle;
+    @BindView(R.id.refresh_layout)
+    SwipeRefreshLayout mRefreshLayout;
+
     private String mType;
+    private boolean recyclerViewIsRefresh;
+    private List<Repository> mRepositories = new ArrayList<>();
 
     public static StarTypeFragment newInstance(String type) {
         Bundle args = new Bundle();
@@ -73,24 +82,56 @@ public class StarTypeFragment extends BaseLoadingFragment {
         }
     }
 
+    @Override
+    protected void initData() {
+        Logger.e("initData");
+    }
+
+    @Override
+    public void onRefresh() {
+        recyclerViewIsRefresh = true;
+        refreshData();
+    }
+
+    @Override
+    public void onLoadMore() {
+        recyclerViewIsRefresh = false;
+        refreshData();
+    }
+
     private void refreshData() {
+        mRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
+        mRefreshLayout.setOnRefreshListener(this);
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager
+                .VERTICAL, false);
+        mStarredRecycle.setLayoutManager(manager);
+        final RecStarredAdapter adapter = new RecStarredAdapter(mRepositories, R.layout.list_item_starred);
+        mStarredRecycle.setAdapter(adapter);
+        mStarredRecycle.setMoreListener(this);
+        mStarredRecycle.setItemAnimator(new DefaultItemAnimator());
         if (isTag()) {
 
         } else {
             MySubscriber<List<Repository>> subscriber = new MySubscriber<>(new SubscriberListener<List<Repository>>() {
                 @Override
                 public void onNext(final List<Repository> repository) {
+                    finishRefresh();
                     showContentView();
-                    LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager
-                            .VERTICAL, false);
-                    mStarredRecycle.setLayoutManager(manager);
-                    RecStarredAdapter adapter = new RecStarredAdapter(repository, R.layout.list_item_starred);
-                    mStarredRecycle.setAdapter(adapter);
+                    if (recyclerViewIsRefresh) {
+                        mRepositories = repository;
+                    } else {
+                        mRepositories.addAll(repository);
+                    }
+                    adapter.notifyItemRangeRemoved(mRepositories.size(), repository.size());
+                    mStarredRecycle.notifyMoreFinish(true);
                 }
 
                 @Override
                 public void onError(final Throwable e) {
-                    showErrorView();
+                    finishRefresh();
+                    if (recyclerViewIsRefresh) {
+                        showErrorView();
+                    }
                 }
             });
             UserRecord record = UserRecord.getUserRecord();
@@ -101,13 +142,12 @@ public class StarTypeFragment extends BaseLoadingFragment {
         }
     }
 
-    @Override
-    protected void initData() {
-
-    }
-
     private boolean isTag() {
         return mType.equals(Constants.FRAGMENT_TAG);
+    }
+
+    public void finishRefresh() {
+        mRefreshLayout.setRefreshing(false);
     }
 
 }

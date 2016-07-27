@@ -8,7 +8,7 @@ public class Constants {
 
     public static final String FRAGMENT_TYPE = "fragment_type";
     public static final String FRAGMENT_TAG = "fragment_tag";
-    public static final String FRAGMENT_DICT = "fragment_dict";
+    public static final String FRAGMENT_RECENTLY = "fragment_recently";
 
     public static final String EXTRA_LOGIN_URL = "extra_login_url";
 

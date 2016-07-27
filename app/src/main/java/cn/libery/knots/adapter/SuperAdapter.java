@@ -11,7 +11,7 @@ import java.util.List;
  */
 public abstract class SuperAdapter<E> extends RecyclerView.Adapter<BaseViewHolder> {
 
-    private List<E> mList;
+    public List<E> mList;
     @LayoutRes
     public int mLayout;
     private OnItemClickListener mOnItemClickListener;

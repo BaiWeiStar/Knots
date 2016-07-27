@@ -72,7 +72,7 @@ public class StarFragment extends Fragment {
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getChildFragmentManager());
         adapter.addFragment(StarTypeFragment.newInstance(Constants.FRAGMENT_TAG), "Tag");
-        adapter.addFragment(StarTypeFragment.newInstance(Constants.FRAGMENT_DICT), "Dict");
+        adapter.addFragment(StarTypeFragment.newInstance(Constants.FRAGMENT_RECENTLY), "Recently");
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(2);
     }
