@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
+import cn.libery.knots.utils.TimeUtil;
+
 /**
  * Created by Libery on 2016/7/25.
  * Email:libery.szq@qq.com
@@ -183,7 +185,7 @@ public class Repository extends Result {
     private String deployments_url;
     private Date created_at;
     private Date updated_at;
-    private String pushed_at;
+    private Date pushed_at;
     private String git_url;
     private String ssh_url;
     private String clone_url;
@@ -572,16 +574,16 @@ public class Repository extends Result {
         this.deployments_url = deployments_url;
     }
 
-    public Date getCreated_at() {
-        return created_at;
+    public String getCreated_at() {
+        return TimeUtil.yyyyMMdd(created_at);
     }
 
     public void setCreated_at(Date created_at) {
         this.created_at = created_at;
     }
 
-    public Date getUpdated_at() {
-        return updated_at;
+    public String getUpdated_at() {
+        return TimeUtil.yyyyMMdd(updated_at);
     }
 
     public void setUpdated_at(Date updated_at) {
@@ -589,10 +591,10 @@ public class Repository extends Result {
     }
 
     public String getPushed_at() {
-        return pushed_at;
+        return TimeUtil.yyyyMMdd(pushed_at);
     }
 
-    public void setPushed_at(String pushed_at) {
+    public void setPushed_at(Date pushed_at) {
         this.pushed_at = pushed_at;
     }
 

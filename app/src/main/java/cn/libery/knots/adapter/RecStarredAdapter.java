@@ -37,18 +37,29 @@ public class RecStarredAdapter extends SuperAdapter<Repository> {
         viewHolder.fullName.setText(rep.getFull_name());
         viewHolder.desc.setText(rep.getDescription());
         viewHolder.starredCount.setText(rep.getStargazers_count() + "");
-        viewHolder.starredTime.setText(rep.getUpdated_at().toString());
+        viewHolder.starredTime.setText(rep.getPushed_at());
+        viewHolder.forkCount.setText(rep.getForks() + "");
+        viewHolder.type.setText(rep.getLanguage());
     }
 
     public static class StarViewHolder extends BaseViewHolder {
         @BindView(R.id.item_full_name)
         TextView fullName;
+
         @BindView(R.id.item_desc)
         TextView desc;
-        @BindView(R.id.item_count)
-        TextView starredTime;
-        @BindView(R.id.item_time)
+
+        @BindView(R.id.item_start_count)
         TextView starredCount;
+
+        @BindView(R.id.item_time)
+        TextView starredTime;
+
+        @BindView(R.id.item_fork_count)
+        TextView forkCount;
+
+        @BindView(R.id.item_type)
+        TextView type;
 
         public StarViewHolder(final View itemView) {
             super(itemView);
