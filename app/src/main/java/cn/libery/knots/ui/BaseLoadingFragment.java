@@ -40,6 +40,7 @@ public abstract class BaseLoadingFragment extends BaseLazyFragment {
             @Override
             public void onClick(View v) {
                 loadData();
+                showLoadingView();
             }
         });
         initView(v);
