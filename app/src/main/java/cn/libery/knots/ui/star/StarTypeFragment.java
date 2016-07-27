@@ -19,12 +19,15 @@ import cn.libery.knots.api.subscribers.SubscriberListener;
 import cn.libery.knots.db.UserRecord;
 import cn.libery.knots.model.Repository;
 import cn.libery.knots.ui.BaseLoadingFragment;
+import cn.libery.knots.utils.Logger;
 
 /**
  * Created by Libery on 2016/7/14.
  * Email:libery.szq@qq.com
  */
 public class StarTypeFragment extends BaseLoadingFragment {
+
+    private boolean isPrepared;
 
     @BindView(R.id.starred_recycle)
     RecyclerView mStarredRecycle;
@@ -50,18 +53,24 @@ public class StarTypeFragment extends BaseLoadingFragment {
 
     @Override
     protected void loadData() {
+        Logger.e("loadData");
         refreshData();
     }
 
     @Override
     protected void initView(final View view) {
+        isPrepared = true;
         ButterKnife.bind(this, view);
     }
 
     @Override
     protected void lazyLoad() {
-        mType = getArguments().getString(Constants.FRAGMENT_TYPE);
-        refreshData();
+        if (isPrepared && mIsVisibleToUser) {
+            isPrepared = false;
+            Logger.e("lazyLoad");
+            mType = getArguments().getString(Constants.FRAGMENT_TYPE);
+            refreshData();
+        }
     }
 
     private void refreshData() {
