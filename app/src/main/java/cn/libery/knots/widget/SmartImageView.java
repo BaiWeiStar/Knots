@@ -5,6 +5,7 @@ import android.support.annotation.DrawableRes;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
+import com.bumptech.glide.DrawableTypeRequest;
 import com.bumptech.glide.Glide;
 
 import cn.libery.knots.R;
@@ -24,10 +25,14 @@ public class SmartImageView extends ImageView {
     }
 
     public void setImageUrl(String url) {
-        setImageUrl(url, 0, 0);
+        setImageUrl(url, 0, 0, 0);
     }
 
-    public void setImageUrl(String url, @DrawableRes int loadingDrawable, @DrawableRes int failDrawable) {
+    public void setImageUrl(String url, int radius) {
+        setImageUrl(url, 0, 0, radius);
+    }
+
+    public void setImageUrl(String url, @DrawableRes int loadingDrawable, @DrawableRes int failDrawable, int radius) {
         if (loadingDrawable == 0) {
             loadingDrawable = R.mipmap.ic_launcher;
         }
@@ -35,13 +40,19 @@ public class SmartImageView extends ImageView {
         if (failDrawable == 0) {
             failDrawable = R.mipmap.ic_launcher;
         }
-        Glide.with(getContext().getApplicationContext())
-                .load(url)
-                .placeholder(loadingDrawable)
+        Context context = getContext();
+        if (context == null) {
+            return;
+        }
+        DrawableTypeRequest<String> g = Glide.with(context).load(url);
+        g.placeholder(loadingDrawable)
                 .error(failDrawable)
                 .fitCenter()
-                .crossFade()
-                .into(this);
+                .crossFade();
+        if (radius != 0) {
+            g.transform(new GlideRoundTransform(context, radius));
+        }
+        g.into(this);
     }
 
 }
