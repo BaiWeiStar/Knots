@@ -50,7 +50,9 @@ public class SmartImageView extends ImageView {
                 .fitCenter()
                 .crossFade();
         if (radius != 0) {
-            g.transform(new GlideRoundTransform(context, radius));
+            GlideRoundTransform transform = new GlideRoundTransform(context);
+            transform.setRadius(radius);
+            g.transform(transform);
         }
         g.into(this);
     }

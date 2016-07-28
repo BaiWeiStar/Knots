@@ -11,27 +11,25 @@ import android.graphics.RectF;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 
-import cn.libery.knots.utils.PixelUtil;
-
 /**
  * Created by Libery on 2016/7/28.
  * Email:libery.szq@qq.com
  */
 public class GlideRoundTransform extends BitmapTransformation {
 
-    private float radius = 0f;
 
-    public GlideRoundTransform(final BitmapPool bitmapPool) {
-        super(bitmapPool);
+    public void setRadius(final float radius) {
+        this.radius = radius;
     }
+
+    private float radius = 3f;
 
     public GlideRoundTransform(final Context context) {
-        super(context);
+        this(context, 3);
     }
 
-    public GlideRoundTransform(final Context context, int dp) {
+    public GlideRoundTransform(final Context context, float dp) {
         super(context);
-        radius = PixelUtil.dp2px(dp);
     }
 
     @Override
@@ -65,6 +63,5 @@ public class GlideRoundTransform extends BitmapTransformation {
         canvas.drawColor(Color.WHITE);
         return result;
     }
-
 
 }

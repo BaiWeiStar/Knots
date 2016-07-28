@@ -81,7 +81,7 @@ public class MyFragment extends BaseLoadingFragment {
 
     private void refreshUI(UserRecord record) {
         Logger.e("id = %s", record.id);
-        mMyAvatar.setImageUrl(record.avatar_url, 5);
+        mMyAvatar.setImageUrl(record.avatar_url, 15);
         mMyLogin.setText(record.login);
         mMyName.setText(record.name);
         mMyLocation.setText(record.location);
