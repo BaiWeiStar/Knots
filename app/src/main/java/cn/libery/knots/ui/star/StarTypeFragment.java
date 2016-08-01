@@ -40,7 +40,8 @@ public class StarTypeFragment extends BaseLoadingFragment implements SwipeRefres
 
     private String mType;
     private boolean recyclerViewIsRefresh;
-    private List<Repository> mRepositories = new ArrayList<>();
+    private RecStarredAdapter adapter;
+    private List<Repository> mRepositories;
 
     public static StarTypeFragment newInstance(String type) {
         Bundle args = new Bundle();
@@ -78,6 +79,17 @@ public class StarTypeFragment extends BaseLoadingFragment implements SwipeRefres
             isPrepared = false;
             Logger.e("lazyLoad");
             mType = getArguments().getString(Constants.FRAGMENT_TYPE);
+            recyclerViewIsRefresh = true;
+            mRepositories = new ArrayList<>();
+            mRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
+            mRefreshLayout.setOnRefreshListener(this);
+            LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager
+                    .VERTICAL, false);
+            mStarredRecycle.setLayoutManager(manager);
+            adapter = new RecStarredAdapter(mRepositories, R.layout.list_item_starred);
+            mStarredRecycle.setAdapter(adapter);
+            mStarredRecycle.setMoreListener(this);
+            mStarredRecycle.setItemAnimator(new DefaultItemAnimator());
             refreshData();
         }
     }
@@ -100,43 +112,37 @@ public class StarTypeFragment extends BaseLoadingFragment implements SwipeRefres
     }
 
     private void refreshData() {
-        mRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
-        mRefreshLayout.setOnRefreshListener(this);
-        LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager
-                .VERTICAL, false);
-        mStarredRecycle.setLayoutManager(manager);
-        final RecStarredAdapter adapter = new RecStarredAdapter(mRepositories, R.layout.list_item_starred);
-        mStarredRecycle.setAdapter(adapter);
-        mStarredRecycle.setMoreListener(this);
-        mStarredRecycle.setItemAnimator(new DefaultItemAnimator());
         if (isTag()) {
 
         } else {
             MySubscriber<List<Repository>> subscriber = new MySubscriber<>(new SubscriberListener<List<Repository>>() {
                 @Override
                 public void onNext(final List<Repository> repository) {
-                    finishRefresh();
                     showContentView();
                     if (recyclerViewIsRefresh) {
-                        mRepositories = repository;
+                        finishRefresh();
+                        mRepositories.clear();
+                        mRepositories.addAll(repository);
+                        adapter.notifyDataSetChanged();
                     } else {
                         mRepositories.addAll(repository);
+                        adapter.notifyItemRangeChanged(mRepositories.size() - 1, repository.size());
                     }
-                    adapter.notifyItemRangeRemoved(mRepositories.size(), repository.size());
                     mStarredRecycle.notifyMoreFinish(true);
                 }
 
                 @Override
                 public void onError(final Throwable e) {
-                    finishRefresh();
                     if (recyclerViewIsRefresh) {
+                        finishRefresh();
                         showErrorView();
                     }
+                    mStarredRecycle.notifyMoreFinish(true);
                 }
             });
             UserRecord record = UserRecord.getUserRecord();
             if (record != null) {
-                Api2.getInstance().getUserStarred(subscriber, record.login, 1, 20);
+                Api2.getInstance().getUserStarred(subscriber, record.login, 1, 5);
             }
             mSubscription.add(subscriber);
         }

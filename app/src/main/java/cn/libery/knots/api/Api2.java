@@ -19,6 +19,7 @@ import cn.libery.knots.db.UserRecord;
 import cn.libery.knots.model.Repository;
 import cn.libery.knots.model.Result;
 import cn.libery.knots.model.User;
+import cn.libery.knots.utils.Logger;
 import okhttp3.Headers;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -59,7 +60,7 @@ public class Api2 {
         } else {
             token = "";
         }
-
+        Logger.e("api2" + token);
         Interceptor interceptor = new Interceptor() {
 
             @Override
@@ -158,8 +159,8 @@ public class Api2 {
     private static class HttpResultFunc<T extends Result> implements Func1<T, T> {
         @Override
         public T call(final T t) {
-            if (!TextUtils.isEmpty(t.error)) {
-                throw new ApiException(t.error_description, t.error_uri);
+            if (!TextUtils.isEmpty(t.message)) {
+                throw new ApiException(t.message, t.documentation_url);
             } else {
                 return t;
             }

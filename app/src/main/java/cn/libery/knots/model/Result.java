@@ -10,4 +10,6 @@ public class Result {
     public String error_description;
     public String error_uri;
 
+    public String message;
+    public String documentation_url;
 }
