@@ -3,15 +3,9 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/refresh_layout"
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
+        android:id="@+id/starred_recycle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <cn.libery.knots.widget.SwipeRecyclerView
-            android:id="@+id/starred_recycle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </android.support.v4.widget.SwipeRefreshLayout>
+        android:layout_height="match_parent"/>
 
 </FrameLayout>

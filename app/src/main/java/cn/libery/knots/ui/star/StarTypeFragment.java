@@ -2,10 +2,12 @@ package cn.libery.knots.ui.star;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
+
+import com.jcodecraeer.xrecyclerview.ProgressStyle;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,27 +23,28 @@ import cn.libery.knots.api.subscribers.SubscriberListener;
 import cn.libery.knots.db.UserRecord;
 import cn.libery.knots.model.Repository;
 import cn.libery.knots.ui.BaseLoadingFragment;
+import cn.libery.knots.utils.CheckUtil;
 import cn.libery.knots.utils.Logger;
-import cn.libery.knots.widget.SwipeRecyclerView;
+import cn.libery.knots.utils.ToastUtil;
 
 /**
  * Created by Libery on 2016/7/14.
  * Email:libery.szq@qq.com
  */
-public class StarTypeFragment extends BaseLoadingFragment implements SwipeRefreshLayout.OnRefreshListener,
-        SwipeRecyclerView.OnLoadMoreListener {
+public class StarTypeFragment extends BaseLoadingFragment implements XRecyclerView.LoadingListener {
 
     private boolean isPrepared;
 
     @BindView(R.id.starred_recycle)
-    SwipeRecyclerView mStarredRecycle;
-    @BindView(R.id.refresh_layout)
-    SwipeRefreshLayout mRefreshLayout;
+    XRecyclerView mStarredRecycle;
 
     private String mType;
     private boolean recyclerViewIsRefresh;
+    private boolean isFirstStart;//判断第一次加载 为真则加载失败时显示ErrorView
     private RecStarredAdapter adapter;
     private List<Repository> mRepositories;
+    private static final int PAGE_SIZE = 20;
+    private int mPage = 1;
 
     public static StarTypeFragment newInstance(String type) {
         Bundle args = new Bundle();
@@ -77,19 +80,20 @@ public class StarTypeFragment extends BaseLoadingFragment implements SwipeRefres
     protected void lazyLoad() {
         if (isPrepared && mIsVisibleToUser) {
             isPrepared = false;
+            isFirstStart = true;
             Logger.e("lazyLoad");
             mType = getArguments().getString(Constants.FRAGMENT_TYPE);
             recyclerViewIsRefresh = true;
             mRepositories = new ArrayList<>();
-            mRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
-            mRefreshLayout.setOnRefreshListener(this);
             LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager
                     .VERTICAL, false);
             mStarredRecycle.setLayoutManager(manager);
             adapter = new RecStarredAdapter(mRepositories, R.layout.list_item_starred);
             mStarredRecycle.setAdapter(adapter);
-            mStarredRecycle.setMoreListener(this);
             mStarredRecycle.setItemAnimator(new DefaultItemAnimator());
+            mStarredRecycle.setLoadingListener(this);
+            mStarredRecycle.setRefreshProgressStyle(ProgressStyle.BallClipRotatePulse);
+            mStarredRecycle.setLoadingMoreProgressStyle(ProgressStyle.BallClipRotateMultiple);
             refreshData();
         }
     }
@@ -119,30 +123,37 @@ public class StarTypeFragment extends BaseLoadingFragment implements SwipeRefres
                 @Override
                 public void onNext(final List<Repository> repository) {
                     showContentView();
-                    if (recyclerViewIsRefresh) {
-                        finishRefresh();
-                        mRepositories.clear();
+                    if (CheckUtil.isNotNullByList(repository)) {
+                        if (recyclerViewIsRefresh) {
+                            mRepositories.clear();
+                            mStarredRecycle.refreshComplete();
+                        } else {
+                            mPage++;
+                            mStarredRecycle.loadMoreComplete();
+                        }
                         mRepositories.addAll(repository);
                         adapter.notifyDataSetChanged();
                     } else {
-                        mRepositories.addAll(repository);
-                        adapter.notifyItemRangeChanged(mRepositories.size() - 1, repository.size());
+                        ToastUtil.showAtUI("无更多数据");
                     }
-                    mStarredRecycle.notifyMoreFinish(true);
                 }
 
                 @Override
                 public void onError(final Throwable e) {
-                    if (recyclerViewIsRefresh) {
-                        finishRefresh();
+                    if (recyclerViewIsRefresh && isFirstStart) {
                         showErrorView();
+                        isFirstStart = false;
+                        mStarredRecycle.refreshComplete();
+                    } else if (recyclerViewIsRefresh) {
+                        mStarredRecycle.refreshComplete();
+                    } else {
+                        mStarredRecycle.loadMoreComplete();
                     }
-                    mStarredRecycle.notifyMoreFinish(true);
                 }
             });
             UserRecord record = UserRecord.getUserRecord();
             if (record != null) {
-                Api2.getInstance().getUserStarred(subscriber, record.login, 1, 5);
+                Api2.getInstance().getUserStarred(subscriber, record.login, mPage, PAGE_SIZE);
             }
             mSubscription.add(subscriber);
         }
@@ -150,10 +161,6 @@ public class StarTypeFragment extends BaseLoadingFragment implements SwipeRefres
 
     private boolean isTag() {
         return mType.equals(Constants.FRAGMENT_TAG);
-    }
-
-    public void finishRefresh() {
-        mRefreshLayout.setRefreshing(false);
     }
 
 }
