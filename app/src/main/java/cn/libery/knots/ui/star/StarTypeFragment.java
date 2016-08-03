@@ -19,7 +19,6 @@ import cn.libery.knots.R;
 import cn.libery.knots.adapter.RecStarredAdapter;
 import cn.libery.knots.api.Api2;
 import cn.libery.knots.api.subscribers.MySubscriber;
-import cn.libery.knots.api.subscribers.SubscriberListener;
 import cn.libery.knots.db.UserRecord;
 import cn.libery.knots.model.Repository;
 import cn.libery.knots.ui.BaseLoadingFragment;
@@ -81,7 +80,6 @@ public class StarTypeFragment extends BaseLoadingFragment implements XRecyclerVi
         if (isPrepared && mIsVisibleToUser) {
             isPrepared = false;
             isFirstStart = true;
-            Logger.e("lazyLoad");
             mType = getArguments().getString(Constants.FRAGMENT_TYPE);
             recyclerViewIsRefresh = true;
             mRepositories = new ArrayList<>();
@@ -100,7 +98,6 @@ public class StarTypeFragment extends BaseLoadingFragment implements XRecyclerVi
 
     @Override
     protected void initData() {
-        Logger.e("initData");
     }
 
     @Override
@@ -120,7 +117,7 @@ public class StarTypeFragment extends BaseLoadingFragment implements XRecyclerVi
         if (isTag()) {
 
         } else {
-            MySubscriber<List<Repository>> subscriber = new MySubscriber<>(new SubscriberListener<List<Repository>>() {
+            MySubscriber<List<Repository>> subscriber = new MySubscriber<>(new ResultListener<List<Repository>>() {
                 @Override
                 public void onNext(final List<Repository> repository) {
                     showContentView();
@@ -130,7 +127,6 @@ public class StarTypeFragment extends BaseLoadingFragment implements XRecyclerVi
                             mRepositories.clear();
                             mStarredRecycle.refreshComplete();
                         } else {
-                            Logger.e("page = %s", mPage);
                             mStarredRecycle.loadMoreComplete();
                         }
                         mRepositories.addAll(repository);

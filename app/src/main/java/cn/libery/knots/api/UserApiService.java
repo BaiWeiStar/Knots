@@ -39,4 +39,13 @@ public interface UserApiService {
     Observable<List<Repository>> getUserStarred(@Path("name") String userName,
                                                 @Query("page") int page,
                                                 @Query("per_page") int per_page);
+
+    @Headers("Cache-Control: public, max-age=60")
+    @GET("users/{name}/repos")
+    Observable<List<Repository>> getUserRepos(@Path("name") String userName,
+                                              @Query("page") int page,
+                                              @Query("per_page") int per_page,
+                                              @Query("sort") String sort,
+                                              @Query("type") String type,
+                                              @Query("direction") String direction);
 }

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
+import cn.libery.knots.api.subscribers.SubscriberListener;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -13,6 +14,13 @@ import rx.subscriptions.CompositeSubscription;
 public class BaseFragment extends Fragment {
 
     public CompositeSubscription mSubscription;
+
+    protected abstract static class ResultListener<T> implements SubscriberListener<T> {
+        @Override
+        public void onError(final Throwable e) {
+
+        }
+    }
 
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {

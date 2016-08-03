@@ -207,4 +207,11 @@ public class Api2 {
         Observable<List<Repository>> observable = apiService.getUserStarred(userName, page, per_page);
         toSubscribe(observable, subscriber);
     }
+
+    public void getUserRepos(Subscriber<List<Repository>> subscriber, String userName, int page, int per_page) {
+        Observable<List<Repository>> observable = apiService.getUserRepos(userName, page, per_page, "updated", "all",
+                "updated:desc");
+        toSubscribe(observable, subscriber);
+    }
+
 }
