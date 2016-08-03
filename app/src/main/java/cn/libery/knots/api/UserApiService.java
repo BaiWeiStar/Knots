@@ -8,6 +8,7 @@ import cn.libery.knots.model.User;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -33,6 +34,7 @@ public interface UserApiService {
     @GET("users/{name}")
     Observable<User> userProfile(@Path("name") String userName);
 
+    @Headers("Cache-Control: public, max-age=60")
     @GET("users/{name}/starred")
     Observable<List<Repository>> getUserStarred(@Path("name") String userName,
                                                 @Query("page") int page,

@@ -1,11 +1,14 @@
 package cn.libery.knots;
 
+import android.os.Environment;
+
 /**
  * Created by Libery on 2016/7/14.
  * Email:libery.szq@qq.com
  */
 public class Constants {
 
+    public static final String FILE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Knots";
     public static final String FRAGMENT_TYPE = "fragment_type";
     public static final String FRAGMENT_TAG = "fragment_tag";
     public static final String FRAGMENT_RECENTLY = "fragment_recently";

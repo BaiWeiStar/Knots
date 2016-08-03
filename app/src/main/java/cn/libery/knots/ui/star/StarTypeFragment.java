@@ -105,6 +105,7 @@ public class StarTypeFragment extends BaseLoadingFragment implements XRecyclerVi
 
     @Override
     public void onRefresh() {
+        mPage = 1;
         recyclerViewIsRefresh = true;
         refreshData();
     }
@@ -124,17 +125,19 @@ public class StarTypeFragment extends BaseLoadingFragment implements XRecyclerVi
                 public void onNext(final List<Repository> repository) {
                     showContentView();
                     if (CheckUtil.isNotNullByList(repository)) {
+                        mPage++;
                         if (recyclerViewIsRefresh) {
                             mRepositories.clear();
                             mStarredRecycle.refreshComplete();
                         } else {
-                            mPage++;
+                            Logger.e("page = %s", mPage);
                             mStarredRecycle.loadMoreComplete();
                         }
                         mRepositories.addAll(repository);
                         adapter.notifyDataSetChanged();
                     } else {
                         ToastUtil.showAtUI("无更多数据");
+                        mStarredRecycle.loadMoreComplete();
                     }
                 }
 

@@ -117,7 +117,12 @@ public class Api2 {
         });
 
         builder.addInterceptor(interceptor);
+
+/*        File cacheFile = new File(Constants.FILE_PATH);
+        Cache cache = new Cache(cacheFile, 10 * 1024 * 100);
+        builder.cache(cache);*/
         OkHttpClient client = builder.build();
+
         if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
