@@ -1,5 +1,9 @@
 package cn.libery.knots.model;
 
+import java.util.Date;
+
+import cn.libery.knots.utils.TimeUtil;
+
 /**
  * Created by Libery on 2016/7/22.
  * Email:libery.szq@qq.com
@@ -73,8 +77,8 @@ public class User extends Result {
     private int public_gists;
     private int followers;
     private int following;
-    private String created_at;
-    private String updated_at;
+    private Date created_at;
+    private Date updated_at;
     private int private_gists;
     private int total_private_repos;
     private int owned_private_repos;
@@ -333,18 +337,18 @@ public class User extends Result {
     }
 
     public String getCreated_at() {
-        return created_at;
+        return TimeUtil.yyyyMMddHHmm(created_at);
     }
 
-    public void setCreated_at(String created_at) {
+    public void setCreated_at(Date created_at) {
         this.created_at = created_at;
     }
 
     public String getUpdated_at() {
-        return updated_at;
+        return TimeUtil.yyyyMMddHHmm(updated_at);
     }
 
-    public void setUpdated_at(String updated_at) {
+    public void setUpdated_at(Date updated_at) {
         this.updated_at = updated_at;
     }
 

@@ -18,6 +18,7 @@ import cn.libery.knots.api.websource.WebApiProvider;
 import cn.libery.knots.db.UserRecord;
 import cn.libery.knots.model.User;
 import cn.libery.knots.ui.BaseLoadingFragment;
+import cn.libery.knots.utils.CheckUtil;
 import cn.libery.knots.widget.SmartImageView;
 
 /**
@@ -44,6 +45,10 @@ public class MyFragment extends BaseLoadingFragment {
     TextView mMyStarred;
     @BindView(R.id.my_following)
     TextView mMyFollowing;
+    @BindView(R.id.my_company)
+    TextView mMyCompany;
+    @BindView(R.id.my_join_time)
+    TextView mMyJoinTime;
     private boolean isPrepared;
 
     public static MyFragment newInstance() {
@@ -81,9 +86,20 @@ public class MyFragment extends BaseLoadingFragment {
         mMyAvatar.setImageUrl(record.avatar_url);
         mMyLogin.setText(record.login);
         mMyName.setText(record.name);
-        mMyLocation.setText(record.location);
         mMyEmail.setText(record.email);
-        mMyBlog.setText(record.blog);
+        if (CheckUtil.isNotNull(record.location)) {
+            mMyLocation.setVisibility(View.VISIBLE);
+            mMyLocation.setText(record.location);
+        }
+        if (CheckUtil.isNotNull(record.blog)) {
+            mMyBlog.setVisibility(View.VISIBLE);
+            mMyBlog.setText(record.blog);
+        }
+        if (CheckUtil.isNotNull(record.company)) {
+            mMyCompany.setVisibility(View.VISIBLE);
+            mMyCompany.setText(record.company);
+        }
+        mMyJoinTime.setText(record.created_at);
         mMyFollows.setText(String.valueOf(record.followers));
         mMyStarred.setText(String.valueOf(record.starred));
         mMyFollowing.setText(String.valueOf(record.following));

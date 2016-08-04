@@ -1,5 +1,7 @@
 package cn.libery.knots.utils;
 
+import android.text.TextUtils;
+
 import java.util.List;
 
 /**
@@ -10,6 +12,14 @@ public class CheckUtil {
 
     public static boolean isNotNullByList(List list) {
         return list != null && list.size() > 0;
+    }
+
+    public static boolean isNotNull(String str) {
+        return !TextUtils.isEmpty(str);
+    }
+
+    public static boolean isNull(String str) {
+        return TextUtils.isEmpty(str);
     }
 
 }
