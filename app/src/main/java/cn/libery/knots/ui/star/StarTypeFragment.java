@@ -23,7 +23,6 @@ import cn.libery.knots.db.UserRecord;
 import cn.libery.knots.model.Repository;
 import cn.libery.knots.ui.BaseLoadingFragment;
 import cn.libery.knots.utils.CheckUtil;
-import cn.libery.knots.utils.Logger;
 import cn.libery.knots.utils.ToastUtil;
 
 /**
@@ -64,7 +63,6 @@ public class StarTypeFragment extends BaseLoadingFragment implements XRecyclerVi
 
     @Override
     protected void loadData() {
-        Logger.e("loadData");
         refreshData();
     }
 
@@ -121,46 +119,54 @@ public class StarTypeFragment extends BaseLoadingFragment implements XRecyclerVi
 
     private void refreshData() {
         if (isTag()) {
-
+            refreshTagStarred();
         } else {
-            MySubscriber<List<Repository>> subscriber = new MySubscriber<>(new ResultListener<List<Repository>>() {
-                @Override
-                public void onNext(final List<Repository> repository) {
-                    showContentView();
-                    if (CheckUtil.isNotNullByList(repository)) {
-                        mPage++;
-                        if (recyclerViewIsRefresh) {
-                            adapter.update(repository);
-                            mStarredRecycle.refreshComplete();
-                        } else {
-                            mStarredRecycle.loadMoreComplete();
-                            adapter.addAll(repository);
-                        }
-                    } else {
-                        ToastUtil.showAtUI("无更多数据");
-                        mStarredRecycle.loadMoreComplete();
-                    }
-                }
-
-                @Override
-                public void onError(final Throwable e) {
-                    if (recyclerViewIsRefresh && isFirstStart) {
-                        showErrorView();
-                        isFirstStart = false;
-                        mStarredRecycle.refreshComplete();
-                    } else if (recyclerViewIsRefresh) {
-                        mStarredRecycle.refreshComplete();
-                    } else {
-                        mStarredRecycle.loadMoreComplete();
-                    }
-                }
-            });
-            UserRecord record = UserRecord.getUserRecord();
-            if (record != null) {
-                Api2.getInstance().getUserStarred(subscriber, record.login, mPage, PAGE_SIZE);
-            }
-            mSubscription.add(subscriber);
+            refreshCurrentStarred();
         }
+    }
+
+    private void refreshTagStarred() {
+
+    }
+
+    private void refreshCurrentStarred() {
+        MySubscriber<List<Repository>> subscriber = new MySubscriber<>(new ResultListener<List<Repository>>() {
+            @Override
+            public void onNext(final List<Repository> repository) {
+                showContentView();
+                if (CheckUtil.isNotNullByList(repository)) {
+                    mPage++;
+                    if (recyclerViewIsRefresh) {
+                        adapter.update(repository);
+                        mStarredRecycle.refreshComplete();
+                    } else {
+                        mStarredRecycle.loadMoreComplete();
+                        adapter.addAll(repository);
+                    }
+                } else {
+                    ToastUtil.showAtUI("无更多数据");
+                    mStarredRecycle.loadMoreComplete();
+                }
+            }
+
+            @Override
+            public void onError(final Throwable e) {
+                if (recyclerViewIsRefresh && isFirstStart) {
+                    showErrorView();
+                    isFirstStart = false;
+                    mStarredRecycle.refreshComplete();
+                } else if (recyclerViewIsRefresh) {
+                    mStarredRecycle.refreshComplete();
+                } else {
+                    mStarredRecycle.loadMoreComplete();
+                }
+            }
+        });
+        UserRecord record = UserRecord.getUserRecord();
+        if (record != null) {
+            Api2.getInstance().getUserStarred(subscriber, record.login, mPage, PAGE_SIZE);
+        }
+        mSubscription.add(subscriber);
     }
 
     private boolean isTag() {

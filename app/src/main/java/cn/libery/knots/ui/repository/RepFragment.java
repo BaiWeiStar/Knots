@@ -89,7 +89,6 @@ public class RepFragment extends BaseLoadingFragment implements XRecyclerView.Lo
     protected void initView(final View view) {
         isPrepared = true;
         ButterKnife.bind(this, view);
-
     }
 
     @Override
@@ -135,7 +134,6 @@ public class RepFragment extends BaseLoadingFragment implements XRecyclerView.Lo
             Api2.getInstance().getUserRepos(subscriber, record.login, mPage, PAGE_SIZE);
         }
         mSubscription.add(subscriber);
-
     }
 
     @Override

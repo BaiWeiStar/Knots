@@ -12,7 +12,6 @@ import cn.libery.knots.R;
 import cn.libery.knots.api.Api;
 import cn.libery.knots.api.Api2;
 import cn.libery.knots.api.subscribers.ProgressSubscriber;
-import cn.libery.knots.api.subscribers.SubscriberListener;
 import cn.libery.knots.db.UserRecord;
 import cn.libery.knots.model.Token;
 import cn.libery.knots.model.User;
@@ -35,13 +34,11 @@ public class GuideActivity extends BaseActivity {
 
     @Override
     protected void obtainParam(final Intent intent) {
-
     }
 
     @Override
     protected void initView() {
         ButterKnife.bind(this);
-
     }
 
     @Override
@@ -80,7 +77,7 @@ public class GuideActivity extends BaseActivity {
     private void onUserLoggedIn(Uri uri) {
         if (uri != null && uri.getScheme().equals("http")) {
             String code = uri.getQueryParameter("code");
-            ProgressSubscriber<Token> subscriber = new ProgressSubscriber<>(this, new SubscriberListener<Token>() {
+            ProgressSubscriber<Token> subscriber = new ProgressSubscriber<>(this, new ResultListener<Token>() {
                 @Override
                 public void onNext(final Token token) {
                     if (token != null) {
@@ -88,10 +85,6 @@ public class GuideActivity extends BaseActivity {
                     }
                 }
 
-                @Override
-                public void onError(final Throwable e) {
-
-                }
             });
             Api.getInstance().postObtainToken(subscriber, Constants.GitHub.CLIENT_ID, Constants.GitHub.SECRET, code,
                     Constants.GitHub.REDIRECT_URI);
@@ -101,7 +94,7 @@ public class GuideActivity extends BaseActivity {
 
     private void endAuth(final String access_token, final String scope) {
         Logger.e(access_token);
-        ProgressSubscriber<User> subscriber = new ProgressSubscriber<>(this, new SubscriberListener<User>() {
+        ProgressSubscriber<User> subscriber = new ProgressSubscriber<>(this, new ResultListener<User>() {
             @Override
             public void onNext(final User user) {
                 if (user != null) {
@@ -112,10 +105,6 @@ public class GuideActivity extends BaseActivity {
                 }
             }
 
-            @Override
-            public void onError(final Throwable e) {
-
-            }
         });
         Api2.getInstance().authUserClient(subscriber, access_token);
         mSubscription.add(subscriber);
