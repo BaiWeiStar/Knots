@@ -2,6 +2,7 @@ package cn.libery.knots.adapter;
 
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import java.util.List;
 
@@ -14,8 +15,8 @@ public abstract class SuperAdapter<E> extends RecyclerView.Adapter<BaseViewHolde
     public List<E> mList;
     @LayoutRes
     public int mLayout;
-    private OnItemClickListener mOnItemClickListener;
-    private OnItemLongClickListener mOnItemLongClickListener;
+    protected OnItemClickListener mOnItemClickListener;
+    protected OnItemLongClickListener mOnItemLongClickListener;
 
     public void setOnItemClickListener(final OnItemClickListener onItemClickListener) {
         mOnItemClickListener = onItemClickListener;
@@ -38,6 +39,7 @@ public abstract class SuperAdapter<E> extends RecyclerView.Adapter<BaseViewHolde
     public void update(List<E> list) {
         mList = list;
         notifyDataSetChanged();
+        notifyItemRangeChanged(0, mList.size());
     }
 
     public void addAll(List<E> list) {
@@ -47,18 +49,24 @@ public abstract class SuperAdapter<E> extends RecyclerView.Adapter<BaseViewHolde
 
     public void remove(E e) {
         mList.remove(e);
+        notifyDataSetChanged();
     }
 
     public void remove(int position) {
         mList.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public E getItem(int position) {
+        return mList.get(position);
     }
 
     public interface OnItemClickListener {
-        void onClick(int position);
+        void onClick(View view, int position);
     }
 
     public interface OnItemLongClickListener {
-        void onLongClick(int position);
+        void onLongClick(View view, int position);
     }
 
 }

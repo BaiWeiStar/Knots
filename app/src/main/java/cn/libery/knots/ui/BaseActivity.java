@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import cn.libery.knots.R;
+import cn.libery.knots.api.subscribers.SubscriberListener;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -21,6 +22,13 @@ import rx.subscriptions.CompositeSubscription;
 public abstract class BaseActivity extends AppCompatActivity {
 
     public CompositeSubscription mSubscription;
+
+    protected abstract static class ResultListener<T> implements SubscriberListener<T> {
+        @Override
+        public void onError(final Throwable e) {
+
+        }
+    }
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {

@@ -9,7 +9,6 @@ import android.view.View;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -17,6 +16,7 @@ import butterknife.ButterKnife;
 import cn.libery.knots.Constants;
 import cn.libery.knots.R;
 import cn.libery.knots.adapter.RecStarredAdapter;
+import cn.libery.knots.adapter.SuperAdapter;
 import cn.libery.knots.api.Api2;
 import cn.libery.knots.api.subscribers.MySubscriber;
 import cn.libery.knots.db.UserRecord;
@@ -41,7 +41,6 @@ public class StarTypeFragment extends BaseLoadingFragment implements XRecyclerVi
     private boolean recyclerViewIsRefresh;
     private boolean isFirstStart;//判断第一次加载 为真则加载失败时显示ErrorView
     private RecStarredAdapter adapter;
-    private List<Repository> mRepositories;
     private static final int PAGE_SIZE = 20;
     private int mPage = 1;
 
@@ -82,17 +81,24 @@ public class StarTypeFragment extends BaseLoadingFragment implements XRecyclerVi
             isFirstStart = true;
             mType = getArguments().getString(Constants.FRAGMENT_TYPE);
             recyclerViewIsRefresh = true;
-            mRepositories = new ArrayList<>();
             LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager
                     .VERTICAL, false);
             mStarredRecycle.setLayoutManager(manager);
-            adapter = new RecStarredAdapter(mRepositories, R.layout.list_item_starred);
+            adapter = new RecStarredAdapter(null, R.layout.list_item_starred);
             mStarredRecycle.setAdapter(adapter);
             mStarredRecycle.setItemAnimator(new DefaultItemAnimator());
             mStarredRecycle.setLoadingListener(this);
             mStarredRecycle.setRefreshProgressStyle(ProgressStyle.BallClipRotatePulse);
             mStarredRecycle.setLoadingMoreProgressStyle(ProgressStyle.BallClipRotateMultiple);
             refreshData();
+            adapter.setOnItemClickListener(new SuperAdapter.OnItemClickListener() {
+                @Override
+                public void onClick(final View view, int position) {
+                    position--;
+                    Repository rep = adapter.getItem(position);
+                    ToastUtil.showAtUI(rep.getName());
+                }
+            });
         }
     }
 
@@ -124,13 +130,12 @@ public class StarTypeFragment extends BaseLoadingFragment implements XRecyclerVi
                     if (CheckUtil.isNotNullByList(repository)) {
                         mPage++;
                         if (recyclerViewIsRefresh) {
-                            mRepositories.clear();
+                            adapter.update(repository);
                             mStarredRecycle.refreshComplete();
                         } else {
                             mStarredRecycle.loadMoreComplete();
+                            adapter.addAll(repository);
                         }
-                        mRepositories.addAll(repository);
-                        adapter.notifyDataSetChanged();
                     } else {
                         ToastUtil.showAtUI("无更多数据");
                         mStarredRecycle.loadMoreComplete();

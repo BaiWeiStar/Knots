@@ -25,7 +25,8 @@ public class RecStarredAdapter extends SuperAdapter<Repository> {
 
     @Override
     public BaseViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
-        return new StarViewHolder(LayoutInflater.from(parent.getContext()).inflate(mLayout, parent, false));
+        return new StarViewHolder(LayoutInflater.from(parent.getContext()).inflate(mLayout, parent, false),
+                mOnItemClickListener);
     }
 
     @Override
@@ -40,7 +41,9 @@ public class RecStarredAdapter extends SuperAdapter<Repository> {
         viewHolder.type.setText(rep.getLanguage());
     }
 
-    public static class StarViewHolder extends BaseViewHolder {
+    public static class StarViewHolder extends BaseViewHolder implements View.OnClickListener {
+
+        private OnItemClickListener mOnItemClickListener;
         @BindView(R.id.item_full_name)
         TextView fullName;
 
@@ -59,11 +62,19 @@ public class RecStarredAdapter extends SuperAdapter<Repository> {
         @BindView(R.id.item_type)
         TextView type;
 
-        public StarViewHolder(final View itemView) {
+        public StarViewHolder(final View itemView, OnItemClickListener listener) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            mOnItemClickListener = listener;
+            itemView.setOnClickListener(this);
         }
 
+        @Override
+        public void onClick(final View v) {
+            if (mOnItemClickListener != null) {
+                mOnItemClickListener.onClick(v, getAdapterPosition());
+            }
+        }
     }
 
 }
