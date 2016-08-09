@@ -5,6 +5,9 @@ import java.util.List;
 import cn.libery.knots.model.Repository;
 import cn.libery.knots.model.Token;
 import cn.libery.knots.model.User;
+import cn.libery.knots.model.code.Blob;
+import cn.libery.knots.model.code.Reference;
+import cn.libery.knots.model.code.Tree;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -48,4 +51,17 @@ public interface UserApiService {
                                               @Query("sort") String sort,
                                               @Query("type") String type,
                                               @Query("direction") String direction);
+
+    @GET("/repos/{owner}/{repo}/git/refs")
+    Observable<List<Reference>> getReposReference(@Path("owner") String owner, @Path("repo") String name,
+                                                  @Query("page") int page);
+
+    @GET("/repos/{owner}/{repo}/git/trees/{sha}")
+    Observable<Tree> getReposTree(@Path("owner") String owner, @Path("repo") String name,
+                                  @Path("sha") String sha);
+
+    @GET("/repos/{owner}/{repo}/git/blobs/{sha}")
+    Observable<Blob> getRepoBlob(@Path("owner") String owner, @Path("repo") String name,
+                                 @Path("sha") String sha);
+
 }
