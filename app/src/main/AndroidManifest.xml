@@ -32,6 +32,8 @@
         </activity>
         <activity android:name=".ui.LoginActivity">
         </activity>
+        <activity android:name=".ui.content.RepoDetailActivity">
+        </activity>
     </application>
 
 </manifest>

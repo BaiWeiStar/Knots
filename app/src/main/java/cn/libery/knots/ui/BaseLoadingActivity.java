@@ -1,6 +1,5 @@
 package cn.libery.knots.ui;
 
-import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.view.LayoutInflater;
@@ -23,11 +22,14 @@ public abstract class BaseLoadingActivity extends BaseActivity {
     View mEmptyView;
     private View[] mViews;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_base_loading_root);
 
+    @Override
+    protected int getContentView() {
+        return R.layout.activity_base_loading_root;
+    }
+
+    @Override
+    protected void initView() {
         mContentView = (ViewGroup) findViewById(R.id.base_content);
         mProgressBar = findViewById(R.id.base_progressbar);
         mErrorView = findViewById(R.id.base_error);
@@ -46,7 +48,7 @@ public abstract class BaseLoadingActivity extends BaseActivity {
     protected abstract void loadData();
 
     public void setLoadingContentView(int contentLayoutId) {
-        LayoutInflater.from(this).inflate(contentLayoutId, mContentView);
+        LayoutInflater.from(this).inflate(contentLayoutId, mContentView, true);
     }
 
     public void setStatusLoading() {

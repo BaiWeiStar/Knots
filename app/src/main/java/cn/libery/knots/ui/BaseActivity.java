@@ -34,7 +34,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getContentView());
-
         if (mSubscription == null) {
             mSubscription = new CompositeSubscription();
         }
@@ -42,7 +41,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (getIntent() != null) {
             obtainParam(getIntent());
         }
-
         initView();
         initData();
     }

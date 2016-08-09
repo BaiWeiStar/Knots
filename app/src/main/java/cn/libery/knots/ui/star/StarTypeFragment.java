@@ -22,6 +22,7 @@ import cn.libery.knots.api.subscribers.MySubscriber;
 import cn.libery.knots.db.UserRecord;
 import cn.libery.knots.model.Repository;
 import cn.libery.knots.ui.BaseLoadingFragment;
+import cn.libery.knots.ui.content.RepoDetailActivity;
 import cn.libery.knots.utils.CheckUtil;
 import cn.libery.knots.utils.ToastUtil;
 
@@ -95,6 +96,7 @@ public class StarTypeFragment extends BaseLoadingFragment implements XRecyclerVi
                     position--;
                     Repository rep = adapter.getItem(position);
                     ToastUtil.showAtUI(rep.getName());
+                    startActivity(RepoDetailActivity.intent(getActivity()));
                 }
             });
         }

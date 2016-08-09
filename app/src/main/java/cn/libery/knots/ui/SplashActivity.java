@@ -27,7 +27,6 @@ public class SplashActivity extends BaseActivity {
                 jumpActivity();
             }
         }, 1200);
-
     }
 
     private void jumpActivity() {
