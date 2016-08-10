@@ -95,8 +95,7 @@ public class StarTypeFragment extends BaseLoadingFragment implements XRecyclerVi
                 public void onClick(final View view, int position) {
                     position--;
                     Repository rep = adapter.getItem(position);
-                    ToastUtil.showAtUI(rep.getName());
-                    startActivity(RepoDetailActivity.intent(getActivity()));
+                    startActivity(RepoDetailActivity.intent(getActivity(), rep.getOwner().getLogin(), rep.getName()));
                 }
             });
         }

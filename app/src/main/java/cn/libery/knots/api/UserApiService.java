@@ -53,15 +53,13 @@ public interface UserApiService {
                                               @Query("direction") String direction);
 
     @GET("/repos/{owner}/{repo}/git/refs")
-    Observable<List<Reference>> getReposReference(@Path("owner") String owner, @Path("repo") String name,
+    Observable<List<Reference>> getReposReference(@Path("owner") String owner, @Path("repo") String repo,
                                                   @Query("page") int page);
 
     @GET("/repos/{owner}/{repo}/git/trees/{sha}")
-    Observable<Tree> getReposTree(@Path("owner") String owner, @Path("repo") String name,
-                                  @Path("sha") String sha);
+    Observable<Tree> getReposTree(@Path("owner") String owner, @Path("repo") String repo, @Path("sha") String sha);
 
     @GET("/repos/{owner}/{repo}/git/blobs/{sha}")
-    Observable<Blob> getRepoBlob(@Path("owner") String owner, @Path("repo") String name,
-                                 @Path("sha") String sha);
+    Observable<Blob> getRepoBlob(@Path("owner") String owner, @Path("repo") String repo, @Path("sha") String sha);
 
 }

@@ -19,6 +19,7 @@ import cn.libery.knots.db.UserRecord;
 import cn.libery.knots.model.Repository;
 import cn.libery.knots.model.Result;
 import cn.libery.knots.model.User;
+import cn.libery.knots.model.code.Reference;
 import cn.libery.knots.utils.Logger;
 import okhttp3.Headers;
 import okhttp3.Interceptor;
@@ -211,6 +212,11 @@ public class Api2 {
     public void getUserRepos(Subscriber<List<Repository>> subscriber, String userName, int page, int per_page) {
         Observable<List<Repository>> observable = apiService.getUserRepos(userName, page, per_page, "updated", "all",
                 "updated:desc");
+        toSubscribe(observable, subscriber);
+    }
+
+    public void getReposReference(Subscriber<List<Reference>> subscriber, String owner, String repo, int page) {
+        Observable<List<Reference>> observable = apiService.getReposReference(owner, repo, page);
         toSubscribe(observable, subscriber);
     }
 

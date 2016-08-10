@@ -14,6 +14,8 @@ public class Constants {
     public static final String FRAGMENT_RECENTLY = "fragment_recently";
 
     public static final String EXTRA_LOGIN_URL = "extra_login_url";
+    public static final String EXTRA_REPO_OWNER = "extra_repo_owner";
+    public static final String EXTRA_REPO_NAME = "extra_repo_name";
 
 
     //SharePrefer
