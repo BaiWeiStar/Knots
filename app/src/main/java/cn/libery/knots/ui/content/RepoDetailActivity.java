@@ -47,8 +47,6 @@ public class RepoDetailActivity extends BaseLoadingActivity {
 
     @Override
     protected void initData() {
-        showContentView();
-        initToolbar("仓库");
         getRepoData();
     }
 
@@ -56,11 +54,16 @@ public class RepoDetailActivity extends BaseLoadingActivity {
         MySubscriber<List<Reference>> subscriber = new MySubscriber<>(new ResultListener<List<Reference>>() {
             @Override
             public void onNext(final List<Reference> references) {
-                List<Reference> s = references;
+                updateData(references);
             }
         });
         Api2.getInstance().getReposReference(subscriber, mOwner, mRepo, 1);
     }
 
+    private void updateData(final List<Reference> references) {
+        showContentView();
+        initToolbar(mRepo);
+        setSubtitle(mOwner);
+    }
 
 }

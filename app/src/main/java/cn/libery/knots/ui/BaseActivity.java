@@ -1,5 +1,6 @@
 package cn.libery.knots.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -8,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -22,6 +24,7 @@ import rx.subscriptions.CompositeSubscription;
 public abstract class BaseActivity extends AppCompatActivity {
 
     public CompositeSubscription mSubscription;
+    private Toolbar mToolbar;
 
     protected abstract static class ResultListener<T> implements SubscriberListener<T> {
         @Override
@@ -81,10 +84,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void initToolbar(String title, int backIconRes) {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        TextView titleText = (TextView) toolbar.findViewById(R.id.title);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        TextView titleText = (TextView) mToolbar.findViewById(R.id.title);
+        titleText.setVisibility(View.VISIBLE);
         titleText.setText(title);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(mToolbar);
         setActionBar(backIconRes);
     }
 
@@ -94,10 +98,10 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public void initToolbar(String title, int backIconRes, String rightMenu, final OnToolbarMenuClickListener
             listener) {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        TextView titleText = (TextView) toolbar.findViewById(R.id.title);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        TextView titleText = (TextView) mToolbar.findViewById(R.id.title);
         titleText.setText(title);
-        TextView menuText = (TextView) toolbar.findViewById(R.id.toolbar_right_text_menu);
+        TextView menuText = (TextView) mToolbar.findViewById(R.id.toolbar_right_text_menu);
         menuText.setVisibility(View.VISIBLE);
         menuText.setText(rightMenu);
         menuText.setOnClickListener(new View.OnClickListener() {
@@ -106,7 +110,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 listener.onItemClick();
             }
         });
-        setSupportActionBar(toolbar);
+        setSupportActionBar(mToolbar);
         setActionBar(backIconRes);
     }
 
@@ -118,7 +122,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         initToolbar(title, getString(rightMenuRes), listener);
     }
 
-    private void setActionBar(int backIconRes) {
+    protected void setActionBar(int backIconRes) {
         ActionBar ab = getSupportActionBar();
         if (ab != null) {
             ab.setDisplayHomeAsUpEnabled(true);
@@ -132,14 +136,15 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void setTitle(String title) {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        TextView titleText = (TextView) toolbar.findViewById(R.id.title);
-        titleText.setText(title);
+        TextView titleText = (TextView) mToolbar.findViewById(R.id.title);
+        if (titleText != null) {
+            titleText.setVisibility(View.VISIBLE);
+            titleText.setText(title);
+        }
     }
 
     public void setSubtitle(String subtitle) {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        TextView subtitleText = (TextView) toolbar.findViewById(R.id.subtitle);
+        TextView subtitleText = (TextView) mToolbar.findViewById(R.id.subtitle);
         if (subtitleText != null) {
             subtitleText.setVisibility(View.VISIBLE);
             subtitleText.setText(subtitle);
@@ -148,6 +153,22 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public interface OnToolbarMenuClickListener {
         void onItemClick();
+    }
+
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if (isShouldHideInput(v, ev)) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(v != null ? v.getWindowToken() : null, 0);
+                }
+            }
+            return super.dispatchTouchEvent(ev);
+        }
+        return getWindow().superDispatchTouchEvent(ev) || onTouchEvent(ev);
     }
 
     public boolean isShouldHideInput(View v, MotionEvent event) {
