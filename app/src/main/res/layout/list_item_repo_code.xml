@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:paddingLeft="8dp"
+             android:paddingRight="8dp">
+
+    <ImageView
+        android:id="@+id/code_img"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/loading_01"/>
+
+    <TextView
+        android:id="@+id/code_name"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginLeft="48dp"
+        android:gravity="center"
+        android:textSize="18sp"
+        tools:text="Knots"/>
+
+    <TextView
+        android:id="@+id/code_size"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_gravity="right"
+        android:gravity="center"
+        tools:text="11"
+        android:textSize="18sp"/>
+
+</FrameLayout>

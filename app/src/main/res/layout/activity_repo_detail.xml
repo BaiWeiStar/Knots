@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
 
     <include layout="@layout/toolbar_with_subtitle_text_menu"/>
 
     <com.jcodecraeer.xrecyclerview.XRecyclerView
         android:id="@+id/code_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_marginBottom="?actionBarSize"
+        android:layout_marginTop="?actionBarSize"/>
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/code_branch"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:layout_gravity="bottom"
+        android:background="#66000000"
+        android:gravity="center_vertical"
+        android:paddingLeft="8dp"
+        android:textSize="24sp"
+        android:textColor="@color/white"
+        tools:text="master"/>
+
+</FrameLayout>

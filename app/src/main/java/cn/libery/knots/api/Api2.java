@@ -20,6 +20,7 @@ import cn.libery.knots.model.Repository;
 import cn.libery.knots.model.Result;
 import cn.libery.knots.model.User;
 import cn.libery.knots.model.code.Reference;
+import cn.libery.knots.model.code.Tree;
 import cn.libery.knots.utils.Logger;
 import okhttp3.Headers;
 import okhttp3.Interceptor;
@@ -217,6 +218,11 @@ public class Api2 {
 
     public void getReposReference(Subscriber<List<Reference>> subscriber, String owner, String repo, int page) {
         Observable<List<Reference>> observable = apiService.getReposReference(owner, repo, page);
+        toSubscribe(observable, subscriber);
+    }
+
+    public void getReposTree(Subscriber<Tree> subscriber, String owner, String repo, String sha) {
+        Observable<Tree> observable = apiService.getReposTree(owner, repo, sha);
         toSubscribe(observable, subscriber);
     }
 
