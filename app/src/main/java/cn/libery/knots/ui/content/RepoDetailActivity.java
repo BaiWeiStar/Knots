@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -91,15 +92,16 @@ public class RepoDetailActivity extends BaseLoadingActivity {
         showContentView();
         initToolbar(mRepo);
         setSubtitle(mOwner);
-        String branch;
-        String[] branchs = references.get(0).getRef().split("/");
-        if (branchs.length > 0) {
-            branch = branchs[branchs.length - 1];
-        } else {
-            branch = "";
+        List<Reference> branchs = new ArrayList<>();
+        for (final Reference reference : references) {
+            if (reference.getRef().contains("refs/heads/")) {
+                branchs.add(reference);
+            }
         }
+        String branch = branchs.get(0).getRef().replaceAll("refs/heads/", "");
         mCodeBranch.setText(branch);
-        String sha = references.get(0).getObject().getSha();
+
+        String sha = branchs.get(0).getObject().getSha();
         getCode(sha);
     }
 
