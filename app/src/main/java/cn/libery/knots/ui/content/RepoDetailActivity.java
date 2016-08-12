@@ -84,6 +84,12 @@ public class RepoDetailActivity extends BaseLoadingActivity {
             public void onNext(final List<Reference> references) {
                 updateData(references);
             }
+
+            @Override
+            public void onError(final Throwable e) {
+                super.onError(e);
+                showErrorView();
+            }
         });
         Api2.getInstance().getReposReference(subscriber, mOwner, mRepo, 1);
     }
