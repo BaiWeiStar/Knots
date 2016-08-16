@@ -19,6 +19,7 @@ import cn.libery.knots.db.UserRecord;
 import cn.libery.knots.model.Repository;
 import cn.libery.knots.model.Result;
 import cn.libery.knots.model.User;
+import cn.libery.knots.model.code.Blob;
 import cn.libery.knots.model.code.Reference;
 import cn.libery.knots.model.code.Tree;
 import cn.libery.knots.utils.Logger;
@@ -223,6 +224,11 @@ public class Api2 {
 
     public void getReposTree(Subscriber<Tree> subscriber, String owner, String repo, String sha) {
         Observable<Tree> observable = apiService.getReposTree(owner, repo, sha);
+        toSubscribe(observable, subscriber);
+    }
+
+    public void getRepoBlob(Subscriber<Blob> subscriber, String owner, String repo, String sha) {
+        Observable<Blob> observable = apiService.getRepoBlob(owner, repo, sha);
         toSubscribe(observable, subscriber);
     }
 

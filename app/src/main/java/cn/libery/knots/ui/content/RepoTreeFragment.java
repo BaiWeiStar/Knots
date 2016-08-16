@@ -54,7 +54,7 @@ public class RepoTreeFragment extends BaseLoadingFragment {
 
     @Override
     protected void loadData() {
-        getCode(mSha);
+        getTree(mSha);
     }
 
     @Override
@@ -80,13 +80,18 @@ public class RepoTreeFragment extends BaseLoadingFragment {
         mAdapter.setOnItemClickListener(new SuperAdapter.OnItemClickListener() {
             @Override
             public void onClick(final View view, final int position) {
-                getCode(mAdapter.getItem(position).getSha());
+                GitTree tree = mAdapter.getItem(position);
+                if (tree.isBlob()) {
+                    startActivity(RepoBlobActivity.intent(getActivity(), mOwner, mRepo, tree.getSha()));
+                } else {
+                    getTree(tree.getSha());
+                }
             }
         });
-        getCode(mSha);
+        getTree(mSha);
     }
 
-    private void getCode(String sha) {
+    private void getTree(String sha) {
         final BaseFragment.ResultListener<Tree> listener = new BaseFragment.ResultListener<Tree>() {
             @Override
             public void onNext(final Tree tree) {

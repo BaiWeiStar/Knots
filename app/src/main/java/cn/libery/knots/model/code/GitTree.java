@@ -43,4 +43,8 @@ public class GitTree extends ShaUrl {
         this.size = size;
     }
 
+    public boolean isBlob() {
+        return "blob".equals(type);
+    }
+
 }
