@@ -36,7 +36,6 @@ public class RepFragment extends BaseLoadingFragment implements XRecyclerView.Lo
     private boolean isPrepared;
 
     private boolean recyclerViewIsRefresh;
-    private boolean isFirstStart;//判断第一次加载 为真则加载失败时显示ErrorView
     private RecStarredAdapter adapter;
     private static final int PAGE_SIZE = 20;
     private int mPage = 1;
@@ -118,11 +117,8 @@ public class RepFragment extends BaseLoadingFragment implements XRecyclerView.Lo
 
             @Override
             public void onError(final Throwable e) {
-                if (recyclerViewIsRefresh && isFirstStart) {
+                if (recyclerViewIsRefresh) {
                     showErrorView();
-                    isFirstStart = false;
-                    mRepRecycle.refreshComplete();
-                } else if (recyclerViewIsRefresh) {
                     mRepRecycle.refreshComplete();
                 } else {
                     mRepRecycle.loadMoreComplete();

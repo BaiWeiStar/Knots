@@ -39,7 +39,6 @@ public class StarTypeFragment extends BaseLoadingFragment implements XRecyclerVi
 
     private String mType;
     private boolean recyclerViewIsRefresh;
-    private boolean isFirstStart;//判断第一次加载 为真则加载失败时显示ErrorView
     private RecStarredAdapter adapter;
     private static final int PAGE_SIZE = 20;
     private int mPage = 1;
@@ -77,7 +76,6 @@ public class StarTypeFragment extends BaseLoadingFragment implements XRecyclerVi
     protected void lazyLoad() {
         if (isPrepared && mIsVisibleToUser) {
             isPrepared = false;
-            isFirstStart = true;
             mType = getArguments().getString(Constants.FRAGMENT_TYPE);
             recyclerViewIsRefresh = true;
             LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager
@@ -152,11 +150,8 @@ public class StarTypeFragment extends BaseLoadingFragment implements XRecyclerVi
 
             @Override
             public void onError(final Throwable e) {
-                if (recyclerViewIsRefresh && isFirstStart) {
+                if (recyclerViewIsRefresh) {
                     showErrorView();
-                    isFirstStart = false;
-                    mStarredRecycle.refreshComplete();
-                } else if (recyclerViewIsRefresh) {
                     mStarredRecycle.refreshComplete();
                 } else {
                     mStarredRecycle.loadMoreComplete();
