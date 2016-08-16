@@ -27,6 +27,8 @@ public class RepoDetailActivity extends BaseLoadingActivity {
     TextView mTitle;
     @BindView(R.id.code_branch)
     TextView mCodeBranch;
+    @BindView(R.id.code_tree)
+    TextView mCodeTree;
     private String mOwner, mRepo;
 
     public static Intent intent(Context context, String owner, String repo) {
@@ -93,5 +95,8 @@ public class RepoDetailActivity extends BaseLoadingActivity {
                 mRepo, sha)).commit();
     }
 
+    public void setCodeTree(String codeTree) {
+        mCodeTree.append(codeTree);
+    }
 
 }

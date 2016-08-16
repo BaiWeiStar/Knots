@@ -1,5 +1,6 @@
 package cn.libery.knots.ui.content;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,6 +33,11 @@ public class RepoTreeFragment extends BaseLoadingFragment {
     private String mSha;
     private String mOwner;
     private String mRepo;
+    private RepoDetailActivity mActivity;
+
+    @BindView(R.id.tree_recycle)
+    RecyclerView mTreeRecycle;
+
 
     public static RepoTreeFragment newInstance(String owner, String repo, String sha) {
         Bundle args = new Bundle();
@@ -43,9 +49,11 @@ public class RepoTreeFragment extends BaseLoadingFragment {
         return fragment;
     }
 
-
-    @BindView(R.id.tree_recycle)
-    RecyclerView mTreeRecycle;
+    @Override
+    public void onAttach(final Context context) {
+        super.onAttach(context);
+        mActivity = ((RepoDetailActivity) context);
+    }
 
     @Override
     protected int getContentLayout() {
@@ -85,6 +93,7 @@ public class RepoTreeFragment extends BaseLoadingFragment {
                     startActivity(RepoBlobActivity.intent(getActivity(), mOwner, mRepo, tree.getSha()));
                 } else {
                     getTree(tree.getSha());
+                    mActivity.setCodeTree(tree.getPath());
                 }
             }
         });

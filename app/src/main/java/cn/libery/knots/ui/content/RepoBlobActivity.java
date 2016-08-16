@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.TextView;
 
+import com.zzhoujay.richtext.RichText;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.libery.knots.Constants;
@@ -13,6 +15,7 @@ import cn.libery.knots.api.Api2;
 import cn.libery.knots.api.subscribers.MySubscriber;
 import cn.libery.knots.model.code.Blob;
 import cn.libery.knots.ui.BaseLoadingActivity;
+import cn.libery.knots.utils.ConvertUtil;
 
 /**
  * Created by Libery on 2016/8/16.
@@ -56,7 +59,8 @@ public class RepoBlobActivity extends BaseLoadingActivity {
             @Override
             public void onNext(final Blob tree) {
                 showContentView();
-                mCode.setText(tree.getContent());
+                RichText.fromMarkdown(ConvertUtil.decodeByBase64(tree.getContent())).into(mCode);
+                // mCode.setText();
             }
 
             @Override

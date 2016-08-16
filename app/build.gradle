@@ -51,6 +51,7 @@ dependencies {
 
     compile 'org.jsoup:jsoup:1.9.1'
     compile 'com.jcodecraeer:xrecyclerview:1.2.7'
+    compile 'com.zzhoujay.richtext:richtext:2.0.9'
 
     debugCompile "com.squareup.leakcanary:leakcanary-android:${leakcanary_version}"
     releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:${leakcanary_version}"

@@ -1,5 +1,7 @@
 package cn.libery.knots.utils;
 
+import android.util.Base64;
+
 import java.util.Locale;
 
 /**
@@ -23,6 +25,15 @@ public class ConvertUtil {
 
     public static String getFormatStr00(float size) {
         return String.format(Locale.CHINA, "%.02f", size);
+    }
+
+    public static String decodeByBase64(String str) {
+        if (str != null) {
+            return new String(Base64.decode(str, Base64.DEFAULT));
+        } else {
+            return "";
+        }
+
     }
 
 }
