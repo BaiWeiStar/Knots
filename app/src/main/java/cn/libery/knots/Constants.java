@@ -16,7 +16,7 @@ public class Constants {
     public static final String EXTRA_LOGIN_URL = "extra_login_url";
     public static final String EXTRA_REPO_OWNER = "extra_repo_owner";
     public static final String EXTRA_REPO_NAME = "extra_repo_name";
-
+    public static final String EXTRA_REPO_SHA = "extra_repo_sha";
 
     //SharePrefer
     public static final String SHARE_FIRST_START = "first_start";

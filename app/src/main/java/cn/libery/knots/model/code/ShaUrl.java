@@ -5,9 +5,9 @@ package cn.libery.knots.model.code;
  * Email:libery.szq@qq.com
  */
 public class ShaUrl {
-    public String sha;
-    public String url;
-    public String html_url;
+    private String sha;
+    private String url;
+    private String html_url;
 
     public String getSha() {
         return sha;
