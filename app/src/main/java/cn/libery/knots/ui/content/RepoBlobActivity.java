@@ -71,5 +71,6 @@ public class RepoBlobActivity extends BaseLoadingActivity {
         };
         MySubscriber<Blob> subscriber = new MySubscriber<>(listener);
         Api2.getInstance().getRepoBlob(subscriber, mOwner, mRepo, sha);
+        mSubscription.add(subscriber);
     }
 }

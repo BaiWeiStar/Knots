@@ -62,7 +62,7 @@ public class RepoTreeFragment extends BaseLoadingFragment {
 
     @Override
     protected void loadData() {
-        getTree(mSha);
+        getTree(mSha, true);
     }
 
     @Override
@@ -92,32 +92,39 @@ public class RepoTreeFragment extends BaseLoadingFragment {
                 if (tree.isBlob()) {
                     startActivity(RepoBlobActivity.intent(getActivity(), mOwner, mRepo, tree.getSha()));
                 } else {
-                    getTree(tree.getSha());
-                    mActivity.setCodeTree(tree.getPath());
+                    getTree(tree.getSha(), true);
+                    mActivity.setCodeTree(tree);
                 }
             }
         });
-        getTree(mSha);
+        getTree(mSha, true);
     }
 
-    private void getTree(String sha) {
+    public void getTree(String sha, final boolean isFragment) {
         final BaseFragment.ResultListener<Tree> listener = new BaseFragment.ResultListener<Tree>() {
             @Override
             public void onNext(final Tree tree) {
-                showContentView();
+                if (isFragment) {
+                    showContentView();
+                } else {
+                    mActivity.removeItemAll();
+                }
                 List<GitTree> trees = tree.getTree();
                 Collections.sort(trees, new TreeCompare());
-                mAdapter.update(tree.getTree());
+                mAdapter.update(trees);
             }
 
             @Override
             public void onError(final Throwable e) {
                 super.onError(e);
-                showErrorView();
+                if (isFragment) {
+                    showErrorView();
+                }
             }
         };
         MySubscriber<Tree> subscriber = new MySubscriber<>(listener);
         Api2.getInstance().getReposTree(subscriber, mOwner, mRepo, sha);
+        mSubscription.add(subscriber);
     }
 
 }

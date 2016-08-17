@@ -39,7 +39,11 @@ public abstract class SuperAdapter<E> extends RecyclerView.Adapter<BaseViewHolde
     public void update(List<E> list) {
         mList = list;
         notifyDataSetChanged();
-        //  notifyItemRangeChanged(0, mList.size());
+    }
+
+    public void add(E e) {
+        mList.add(e);
+        notifyDataSetChanged();
     }
 
     public void addAll(List<E> list) {

@@ -2,6 +2,10 @@ package cn.libery.knots.ui.content;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -12,8 +16,11 @@ import butterknife.ButterKnife;
 import cn.libery.knots.Constants;
 import cn.libery.knots.Intents;
 import cn.libery.knots.R;
+import cn.libery.knots.adapter.CodeTreeAdapter;
+import cn.libery.knots.adapter.SuperAdapter;
 import cn.libery.knots.api.Api2;
 import cn.libery.knots.api.subscribers.MySubscriber;
+import cn.libery.knots.model.code.GitTree;
 import cn.libery.knots.model.code.Reference;
 import cn.libery.knots.ui.BaseLoadingActivity;
 
@@ -28,8 +35,11 @@ public class RepoDetailActivity extends BaseLoadingActivity {
     @BindView(R.id.code_branch)
     TextView mCodeBranch;
     @BindView(R.id.code_tree)
-    TextView mCodeTree;
+    RecyclerView mCodeTree;
     private String mOwner, mRepo;
+    private CodeTreeAdapter mAdapter;
+    private RepoTreeFragment mFragment;
+    private int mPosition;
 
     public static Intent intent(Context context, String owner, String repo) {
         return new Intents.Builder().setClass(context, RepoDetailActivity.class)
@@ -58,7 +68,24 @@ public class RepoDetailActivity extends BaseLoadingActivity {
 
     @Override
     protected void initData() {
+        final LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager
+                .HORIZONTAL, false);
+        mCodeTree.setLayoutManager(manager);
+        mAdapter = new CodeTreeAdapter(new ArrayList<GitTree>(), R.layout.list_item_code_tree);
+        mCodeTree.setAdapter(mAdapter);
+        mCodeTree.setItemAnimator(new DefaultItemAnimator());
+        mAdapter.setOnItemClickListener(new SuperAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(final View view, final int position) {
+                mPosition = position;
+                mFragment.getTree(mAdapter.getItem(position).getSha(), false);
+            }
+        });
         getRepoData();
+    }
+
+    public void removeItemAll() {
+        mAdapter.notifyItemMoved(mPosition, mAdapter.getItemCount() - 1);
     }
 
     private void getRepoData() {
@@ -75,6 +102,7 @@ public class RepoDetailActivity extends BaseLoadingActivity {
             }
         });
         Api2.getInstance().getReposReference(subscriber, mOwner, mRepo, 1);
+        mSubscription.add(subscriber);
     }
 
     private void updateData(final List<Reference> references) {
@@ -91,12 +119,12 @@ public class RepoDetailActivity extends BaseLoadingActivity {
         mCodeBranch.setText(branch);
 
         String sha = branchs.get(0).getObject().getSha();
-        getSupportFragmentManager().beginTransaction().add(R.id.code_view, RepoTreeFragment.newInstance(mOwner,
-                mRepo, sha)).commit();
+        mFragment = RepoTreeFragment.newInstance(mOwner, mRepo, sha);
+        getSupportFragmentManager().beginTransaction().add(R.id.code_view, mFragment).commit();
     }
 
-    public void setCodeTree(String codeTree) {
-        mCodeTree.append(codeTree);
+    public void setCodeTree(GitTree tree) {
+        mAdapter.add(tree);
     }
 
 }
