@@ -59,7 +59,7 @@ public class Api2 {
         UserRecord record = UserRecord.getUserRecord();
         final String token;
         if (record != null) {
-            token = "Authorization: token " + record.accessToken;
+            token = "token " + record.accessToken;
         } else {
             token = "";
         }
@@ -73,7 +73,7 @@ public class Api2 {
                         .add("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
                         .add("User-Agent", "Knots");
                 if (!TextUtils.isEmpty(token)) {
-                    builder.add(token);
+                    builder.add("Authorization", token);
                 }
                 Headers headers = builder.build();
                 Request request = chain.request()
@@ -121,16 +121,17 @@ public class Api2 {
 
         builder.addInterceptor(interceptor);
 
+        if (BuildConfig.DEBUG) {
+            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+            builder.addInterceptor(logging);
+        }
+
 /*        File cacheFile = new File(Constants.FILE_PATH);
         Cache cache = new Cache(cacheFile, 10 * 1024 * 100);
         builder.cache(cache);*/
         OkHttpClient client = builder.build();
 
-        if (BuildConfig.DEBUG) {
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-            client = new OkHttpClient.Builder().addInterceptor(logging).build();
-        }
         Retrofit retrofit = new Retrofit.Builder()
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())

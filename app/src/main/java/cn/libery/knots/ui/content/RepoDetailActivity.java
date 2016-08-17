@@ -1,6 +1,8 @@
 package cn.libery.knots.ui.content;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,6 +25,7 @@ import cn.libery.knots.api.subscribers.MySubscriber;
 import cn.libery.knots.model.code.GitTree;
 import cn.libery.knots.model.code.Reference;
 import cn.libery.knots.ui.BaseLoadingActivity;
+import cn.libery.knots.utils.ConvertUtil;
 
 /**
  * Created by Libery on 2016/8/8.
@@ -39,7 +42,7 @@ public class RepoDetailActivity extends BaseLoadingActivity {
     private String mOwner, mRepo;
     private CodeTreeAdapter mAdapter;
     private RepoTreeFragment mFragment;
-    private int mPosition;
+    private int mPosition = 0;
 
     public static Intent intent(Context context, String owner, String repo) {
         return new Intents.Builder().setClass(context, RepoDetailActivity.class)
@@ -85,7 +88,9 @@ public class RepoDetailActivity extends BaseLoadingActivity {
     }
 
     public void removeItemAll() {
-        mAdapter.notifyItemMoved(mPosition, mAdapter.getItemCount() - 1);
+    /*    List<GitTree> t = mAdapter.getList().subList(mPosition, mAdapter.getItemCount() > 0 ? mAdapter.getItemCount()
+                - 1 : 0);
+        mAdapter.removeAll(t);*/
     }
 
     private void getRepoData() {
@@ -109,15 +114,32 @@ public class RepoDetailActivity extends BaseLoadingActivity {
         showContentView();
         initToolbar(mRepo);
         setSubtitle(mOwner);
-        List<Reference> branchs = new ArrayList<>();
+        final List<Reference> branchs = new ArrayList<>();
         for (final Reference reference : references) {
             if (reference.getRef().contains("refs/heads/")) {
                 branchs.add(reference);
             }
         }
-        String branch = branchs.get(0).getRef().replaceAll("refs/heads/", "");
+        String branch = ConvertUtil.headsBranch(branchs.get(0).getRef());
         mCodeBranch.setText(branch);
-
+        mCodeBranch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(RepoDetailActivity.this);
+                int size = branchs.size();
+                String[] b = new String[size];
+                for (int i = 0; i < size; i++) {
+                    b[i] = ConvertUtil.headsBranch(branchs.get(i).getRef());
+                }
+                builder.setItems(b, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        mFragment.getTree(branchs.get(which).getObject().getSha(), false);
+                    }
+                });
+                builder.show();
+            }
+        });
         String sha = branchs.get(0).getObject().getSha();
         mFragment = RepoTreeFragment.newInstance(mOwner, mRepo, sha);
         getSupportFragmentManager().beginTransaction().add(R.id.code_view, mFragment).commit();

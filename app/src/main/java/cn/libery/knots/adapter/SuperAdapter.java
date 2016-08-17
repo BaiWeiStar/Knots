@@ -31,6 +31,10 @@ public abstract class SuperAdapter<E> extends RecyclerView.Adapter<BaseViewHolde
         mLayout = layout;
     }
 
+    public List<E> getList() {
+        return mList;
+    }
+
     @Override
     public int getItemCount() {
         return mList == null ? 0 : mList.size();
@@ -59,6 +63,11 @@ public abstract class SuperAdapter<E> extends RecyclerView.Adapter<BaseViewHolde
     public void remove(int position) {
         mList.remove(position);
         notifyItemRemoved(position);
+    }
+
+    public void removeAll(List<E> e) {
+        mList.removeAll(e);
+        notifyDataSetChanged();
     }
 
     public E getItem(int position) {

@@ -33,7 +33,10 @@ public class ConvertUtil {
         } else {
             return "";
         }
+    }
 
+    public static String headsBranch(String branch) {
+        return branch.replaceAll("refs/heads/", "");
     }
 
 }
