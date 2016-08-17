@@ -20,6 +20,7 @@ import cn.libery.knots.api.subscribers.MySubscriber;
 import cn.libery.knots.db.UserRecord;
 import cn.libery.knots.model.Repository;
 import cn.libery.knots.ui.BaseLoadingFragment;
+import cn.libery.knots.ui.content.RepoDetailActivity;
 import cn.libery.knots.utils.CheckUtil;
 import cn.libery.knots.utils.Logger;
 import cn.libery.knots.utils.ToastUtil;
@@ -67,7 +68,7 @@ public class RepFragment extends BaseLoadingFragment implements XRecyclerView.Lo
                 public void onClick(final View view, int position) {
                     position--;
                     Repository rep = adapter.getItem(position);
-                    ToastUtil.showAtUI(rep.getName());
+                    startActivity(RepoDetailActivity.intent(getActivity(), rep.getOwner().getLogin(), rep.getName()));
                 }
             });
             refreshData();

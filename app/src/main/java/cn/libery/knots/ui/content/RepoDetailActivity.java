@@ -137,6 +137,7 @@ public class RepoDetailActivity extends BaseLoadingActivity {
                     public void onClick(final DialogInterface dialog, final int which) {
                         isClearAdapter = true;
                         mFragment.getTree(branchs.get(which).getObject().getSha(), false);
+                        mCodeBranch.setText(ConvertUtil.headsBranch(branchs.get(which).getRef()));
                     }
                 });
                 builder.show();
