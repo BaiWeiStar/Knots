@@ -34,10 +34,22 @@ public class RepoTreeFragment extends BaseLoadingFragment {
     private String mOwner;
     private String mRepo;
     private RepoDetailActivity mActivity;
+    private GitTree mGitTree;
 
     @BindView(R.id.tree_recycle)
     RecyclerView mTreeRecycle;
 
+    private SuperAdapter.OnItemClickListener mItemClickListener = new SuperAdapter.OnItemClickListener() {
+        @Override
+        public void onClick(final View view, final int position) {
+            mGitTree = mAdapter.getItem(position);
+            if (mGitTree.isBlob()) {
+                startActivity(RepoBlobActivity.intent(getActivity(), mOwner, mRepo, mGitTree.getSha()));
+            } else {
+                getTree(mGitTree.getSha(), true);
+            }
+        }
+    };
 
     public static RepoTreeFragment newInstance(String owner, String repo, String sha) {
         Bundle args = new Bundle();
@@ -80,43 +92,45 @@ public class RepoTreeFragment extends BaseLoadingFragment {
         mSha = getArguments().getString(Constants.EXTRA_REPO_SHA);
         mOwner = getArguments().getString(Constants.EXTRA_REPO_OWNER);
         mRepo = getArguments().getString(Constants.EXTRA_REPO_NAME);
-        final LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager
-                .VERTICAL, false);
+        final LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         mTreeRecycle.setLayoutManager(manager);
         mAdapter = new CodeAdapter(null, R.layout.list_item_repo_code);
         mTreeRecycle.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(new SuperAdapter.OnItemClickListener() {
-            @Override
-            public void onClick(final View view, final int position) {
-                GitTree tree = mAdapter.getItem(position);
-                if (tree.isBlob()) {
-                    startActivity(RepoBlobActivity.intent(getActivity(), mOwner, mRepo, tree.getSha()));
-                } else {
-                    getTree(tree.getSha(), true);
-                    mActivity.setCodeTree(tree);
-                }
-            }
-        });
         getTree(mSha, true);
     }
 
-    public void getTree(String sha, final boolean isFragment) {
+    public void getTree(final String sha, final boolean isFragment) {
+        mAdapter.setOnItemClickListener(null);
         final BaseFragment.ResultListener<Tree> listener = new BaseFragment.ResultListener<Tree>() {
             @Override
             public void onNext(final Tree tree) {
+
                 if (isFragment) {
                     showContentView();
                 } else {
                     mActivity.removeItemAll();
                 }
+
                 List<GitTree> trees = tree.getTree();
                 Collections.sort(trees, new TreeCompare());
                 mAdapter.update(trees);
+
+                if (mGitTree != null && !mGitTree.isBlob()) {
+                    mActivity.setCodeTree(mGitTree);
+                } else {
+                    GitTree t = new GitTree();
+                    t.setSha(sha);
+                    t.setPath(mRepo);
+                    mActivity.setCodeTree(t);
+                }
+
+                mAdapter.setOnItemClickListener(mItemClickListener);
             }
 
             @Override
             public void onError(final Throwable e) {
                 super.onError(e);
+                mAdapter.setOnItemClickListener(mItemClickListener);
                 if (isFragment) {
                     showErrorView();
                 }

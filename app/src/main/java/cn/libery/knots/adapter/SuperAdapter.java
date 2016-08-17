@@ -74,6 +74,11 @@ public abstract class SuperAdapter<E> extends RecyclerView.Adapter<BaseViewHolde
         return mList.get(position);
     }
 
+    public void clear() {
+        mList.clear();
+        notifyDataSetChanged();
+    }
+
     public interface OnItemClickListener {
         void onClick(View view, int position);
     }

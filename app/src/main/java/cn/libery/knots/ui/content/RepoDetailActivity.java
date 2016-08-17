@@ -43,6 +43,7 @@ public class RepoDetailActivity extends BaseLoadingActivity {
     private CodeTreeAdapter mAdapter;
     private RepoTreeFragment mFragment;
     private int mPosition = 0;
+    private boolean isClearAdapter;
 
     public static Intent intent(Context context, String owner, String repo) {
         return new Intents.Builder().setClass(context, RepoDetailActivity.class)
@@ -88,9 +89,9 @@ public class RepoDetailActivity extends BaseLoadingActivity {
     }
 
     public void removeItemAll() {
-    /*    List<GitTree> t = mAdapter.getList().subList(mPosition, mAdapter.getItemCount() > 0 ? mAdapter.getItemCount()
-                - 1 : 0);
-        mAdapter.removeAll(t);*/
+        for (int i = mPosition, size = mAdapter.getItemCount(); i < size; i++) {
+            mAdapter.remove(mPosition);
+        }
     }
 
     private void getRepoData() {
@@ -134,6 +135,7 @@ public class RepoDetailActivity extends BaseLoadingActivity {
                 builder.setItems(b, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog, final int which) {
+                        isClearAdapter = true;
                         mFragment.getTree(branchs.get(which).getObject().getSha(), false);
                     }
                 });
@@ -146,7 +148,13 @@ public class RepoDetailActivity extends BaseLoadingActivity {
     }
 
     public void setCodeTree(GitTree tree) {
-        mAdapter.add(tree);
+        if (!mAdapter.getList().contains(tree)) {
+            mAdapter.add(tree);
+        }
+        if (isClearAdapter) {
+            mAdapter.clear();
+            isClearAdapter = false;
+        }
     }
 
 }
