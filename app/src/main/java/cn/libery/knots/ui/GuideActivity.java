@@ -94,6 +94,7 @@ public class GuideActivity extends BaseActivity {
 
     private void endAuth(final String access_token, final String scope) {
         Logger.e(access_token);
+        final Api2 api = Api2.getInstance();
         ProgressSubscriber<User> subscriber = new ProgressSubscriber<>(this, new ResultListener<User>() {
             @Override
             public void onNext(final User user) {
@@ -101,12 +102,12 @@ public class GuideActivity extends BaseActivity {
                     user.setAccessToken(access_token);
                     UserRecord.saveUser(user, true);
                     SharedPreferUtil.put(Constants.SHARE_FIRST_START, true);
+                    api.setToken(access_token);
                     startMainActivity();
                 }
             }
-
         });
-        Api2.getInstance().authUserClient(subscriber, access_token);
+        api.authUserClient(subscriber, access_token);
         mSubscription.add(subscriber);
     }
 

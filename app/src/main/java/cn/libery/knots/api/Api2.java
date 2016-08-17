@@ -22,6 +22,7 @@ import cn.libery.knots.model.User;
 import cn.libery.knots.model.code.Blob;
 import cn.libery.knots.model.code.Reference;
 import cn.libery.knots.model.code.Tree;
+import cn.libery.knots.utils.CheckUtil;
 import cn.libery.knots.utils.Logger;
 import okhttp3.Headers;
 import okhttp3.Interceptor;
@@ -49,6 +50,17 @@ public class Api2 {
 
     private UserApiService apiService;
 
+    private String mToken;
+
+    /**
+     * 兼容登录时尚未获取到用户信息保存token
+     *
+     * @param token access_Token
+     */
+    public void setToken(final String token) {
+        mToken = "token " + token;
+    }
+
     //构造方法私有
     private Api2() {
         final OkHttpClient.Builder builder = new OkHttpClient.Builder();
@@ -57,13 +69,13 @@ public class Api2 {
         builder.retryOnConnectionFailure(true);
 
         UserRecord record = UserRecord.getUserRecord();
-        final String token;
+
         if (record != null) {
-            token = "token " + record.accessToken;
+            mToken = "token " + record.accessToken;
         } else {
-            token = "";
+            mToken = "";
         }
-        Logger.e("api2" + token);
+        Logger.e("api2" + mToken);
         Interceptor interceptor = new Interceptor() {
 
             @Override
@@ -72,8 +84,8 @@ public class Api2 {
                         .add("Accept", "application/json")
                         .add("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
                         .add("User-Agent", "Knots");
-                if (!TextUtils.isEmpty(token)) {
-                    builder.add("Authorization", token);
+                if (CheckUtil.isNotNull(mToken)) {
+                    builder.add("Authorization", mToken);
                 }
                 Headers headers = builder.build();
                 Request request = chain.request()
