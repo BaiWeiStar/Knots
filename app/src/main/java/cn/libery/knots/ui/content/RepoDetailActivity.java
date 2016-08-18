@@ -25,6 +25,7 @@ import cn.libery.knots.api.subscribers.MySubscriber;
 import cn.libery.knots.model.code.GitTree;
 import cn.libery.knots.model.code.Reference;
 import cn.libery.knots.ui.BaseLoadingActivity;
+import cn.libery.knots.utils.AppUtil;
 import cn.libery.knots.utils.ConvertUtil;
 
 /**
@@ -44,6 +45,10 @@ public class RepoDetailActivity extends BaseLoadingActivity {
     private RepoTreeFragment mFragment;
     private int mPosition = 0;
     private boolean isClearAdapter;
+
+    public String getCodeBranch() {
+        return mCodeBranch.getText().toString();
+    }
 
     public static Intent intent(Context context, String owner, String repo) {
         return new Intents.Builder().setClass(context, RepoDetailActivity.class)
@@ -113,7 +118,12 @@ public class RepoDetailActivity extends BaseLoadingActivity {
 
     private void updateData(final List<Reference> references) {
         showContentView();
-        initToolbar(mRepo);
+        initToolbar(mRepo, getResources().getString(R.string.repo_share), new OnToolbarMenuClickListener() {
+            @Override
+            public void onItemClick() {
+                AppUtil.shareRep(RepoDetailActivity.this, mOwner, mRepo);
+            }
+        });
         setSubtitle(mOwner);
         final List<Reference> branchs = new ArrayList<>();
         for (final Reference reference : references) {

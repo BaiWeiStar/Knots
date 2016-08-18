@@ -3,6 +3,7 @@ package cn.libery.knots;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -70,6 +71,11 @@ public class Intents {
         }
 
         public Builder add(String fieldName, Serializable value) {
+            intent.putExtra(fieldName, value);
+            return this;
+        }
+
+        public Builder add(String fieldName, Parcelable value) {
             intent.putExtra(fieldName, value);
             return this;
         }

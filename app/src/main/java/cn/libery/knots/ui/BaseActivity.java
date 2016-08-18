@@ -101,6 +101,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         TextView titleText = (TextView) mToolbar.findViewById(R.id.title);
         titleText.setText(title);
+        titleText.setVisibility(View.VISIBLE);
         TextView menuText = (TextView) mToolbar.findViewById(R.id.toolbar_right_text_menu);
         menuText.setVisibility(View.VISIBLE);
         menuText.setText(rightMenu);

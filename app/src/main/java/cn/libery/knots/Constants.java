@@ -17,6 +17,9 @@ public class Constants {
     public static final String EXTRA_REPO_OWNER = "extra_repo_owner";
     public static final String EXTRA_REPO_NAME = "extra_repo_name";
     public static final String EXTRA_REPO_SHA = "extra_repo_sha";
+    public static final String EXTRA_REPO_FILE_NAME = "extra_repo_file_name";
+    public static final String EXTRA_REPO_BRANCH = "extra_repo_branch";
+    public static final String EXTRA_REPO_GIT_TREE = "extra_repo_git_tree";
 
     //SharePrefer
     public static final String SHARE_FIRST_START = "first_start";

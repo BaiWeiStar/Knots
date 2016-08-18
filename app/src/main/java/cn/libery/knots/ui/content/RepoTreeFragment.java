@@ -44,7 +44,8 @@ public class RepoTreeFragment extends BaseLoadingFragment {
         public void onClick(final View view, final int position) {
             mGitTree = mAdapter.getItem(position);
             if (mGitTree.isBlob()) {
-                startActivity(RepoBlobActivity.intent(getActivity(), mOwner, mRepo, mGitTree.getSha()));
+                startActivity(RepoBlobActivity.intent(getActivity(), mOwner, mRepo, mGitTree, mActivity.getCodeBranch
+                        ()));
             } else {
                 getTree(mGitTree.getSha(), true);
             }
