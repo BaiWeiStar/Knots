@@ -176,8 +176,13 @@
                 android:textColor="@color/main_black"/>
         </LinearLayout>
 
-
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/token"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textIsSelectable="true"
+        android:visibility="gone"/>
 
 </LinearLayout>

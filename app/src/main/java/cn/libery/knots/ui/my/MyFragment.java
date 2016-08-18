@@ -10,6 +10,7 @@ import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.libery.knots.BuildConfig;
 import cn.libery.knots.R;
 import cn.libery.knots.api.Api;
 import cn.libery.knots.api.Api2;
@@ -49,6 +50,8 @@ public class MyFragment extends BaseLoadingFragment {
     TextView mMyCompany;
     @BindView(R.id.my_join_time)
     TextView mMyJoinTime;
+    @BindView(R.id.token)
+    TextView mToken;
     private boolean isPrepared;
 
     public static MyFragment newInstance() {
@@ -103,6 +106,10 @@ public class MyFragment extends BaseLoadingFragment {
         mMyFollows.setText(String.valueOf(record.followers));
         mMyStarred.setText(String.valueOf(record.starred));
         mMyFollowing.setText(String.valueOf(record.following));
+        if (BuildConfig.DEBUG) {
+            mToken.setVisibility(View.VISIBLE);
+            mToken.setText("Token: " + record.accessToken);
+        }
     }
 
     @Override
