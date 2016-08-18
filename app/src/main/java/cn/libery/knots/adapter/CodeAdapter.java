@@ -15,6 +15,8 @@ import cn.libery.knots.R;
 import cn.libery.knots.model.code.GitTree;
 import cn.libery.knots.utils.ConvertUtil;
 
+import static cn.libery.knots.enums.ModeEnum.TREE;
+
 /**
  * Created by Libery on 2016/8/11.
  * Email:libery.szq@qq.com
@@ -36,7 +38,7 @@ public class CodeAdapter extends SuperAdapter<GitTree> {
         GitTree tree = mList.get(position);
         CodeViewHolder codeHolder = (CodeViewHolder) holder;
         codeHolder.codeName.setText(tree.getPath());
-        if (!"tree".equals(tree.getType())) {
+        if (!TREE.equals(tree.getType())) {
             codeHolder.codeSize.setText(ConvertUtil.getCodeSize(tree.getSize()));
         } else {
             codeHolder.codeSize.setText("");

@@ -125,35 +125,35 @@ public class RepoDetailActivity extends BaseLoadingActivity {
             }
         });
         setSubtitle(mOwner);
-        final List<Reference> branchs = new ArrayList<>();
+        final List<Reference> branches = new ArrayList<>();
         for (final Reference reference : references) {
             if (reference.getRef().contains("refs/heads/")) {
-                branchs.add(reference);
+                branches.add(reference);
             }
         }
-        String branch = ConvertUtil.headsBranch(branchs.get(0).getRef());
+        String branch = ConvertUtil.headsBranch(branches.get(0).getRef());
         mCodeBranch.setText(branch);
         mCodeBranch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(RepoDetailActivity.this);
-                int size = branchs.size();
+                int size = branches.size();
                 String[] b = new String[size];
                 for (int i = 0; i < size; i++) {
-                    b[i] = ConvertUtil.headsBranch(branchs.get(i).getRef());
+                    b[i] = ConvertUtil.headsBranch(branches.get(i).getRef());
                 }
                 builder.setItems(b, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog, final int which) {
                         isClearAdapter = true;
-                        mFragment.getTree(branchs.get(which).getObject().getSha(), false);
-                        mCodeBranch.setText(ConvertUtil.headsBranch(branchs.get(which).getRef()));
+                        mFragment.getTree(branches.get(which).getObject().getSha(), false);
+                        mCodeBranch.setText(ConvertUtil.headsBranch(branches.get(which).getRef()));
                     }
                 });
                 builder.show();
             }
         });
-        String sha = branchs.get(0).getObject().getSha();
+        String sha = branches.get(0).getObject().getSha();
         mFragment = RepoTreeFragment.newInstance(mOwner, mRepo, sha);
         getSupportFragmentManager().beginTransaction().add(R.id.code_view, mFragment).commit();
     }
