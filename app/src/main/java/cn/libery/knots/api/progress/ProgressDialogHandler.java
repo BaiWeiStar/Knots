@@ -30,7 +30,7 @@ public class ProgressDialogHandler extends Handler {
         if (context != null && pd == null) {
             pd = new ProgressDialog(context);
             pd.setMessage("请稍候...");
-            pd.setCancelable(cancelable);
+            pd.setCanceledOnTouchOutside(cancelable);
 
             if (cancelable) {
                 pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
